@@ -66,7 +66,9 @@ function App() {
 
     useEffect(() => {
 
-        db.collection("pokemon").doc(location.pathname.slice(1)).onSnapshot(querySnapshot => {
+        db.collection("pokemon")
+            .doc(location.pathname.slice(1))
+            .onSnapshot(querySnapshot => {
             setClickedData(querySnapshot.data()?.words || []);
         });
 
