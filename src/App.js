@@ -73,7 +73,7 @@ function App() {
                 setWinner(TEAM.blue);
             }
         }
-    }, [gameData]);
+    }, [gameData, getWordsCount, isGameCreated]);
 
     const wordClickHandler = useCallback((i) => {
         if (!winner && !isBlackWordClicked) {
@@ -89,7 +89,7 @@ function App() {
                 setCurrentTeam(invertColor(currentTeam));
             }
         }
-    }, [gameData, currentTeam]);
+    }, [gameData, currentTeam, winner, isBlackWordClicked]);
 
     const TopBanner = () => {
         if (isBlackWordClicked) {
