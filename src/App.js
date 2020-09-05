@@ -34,7 +34,7 @@ function App() {
     const [winner, setWinner] = useState(null);
     const [clickedData, setClickedData] = useState([]);
 
-    const invertColor = useCallback((color) => color === TEAM.red ? TEAM.blue : TEAM.red, []);
+    const invertColor = useCallback(colour => colour === TEAM.red ? TEAM.blue : TEAM.red, []);
     const getWordsCount = useCallback(colour => gameData.filter(i => i.color === colour && i.clicked === false).length, [gameData]);
 
 
@@ -85,7 +85,8 @@ function App() {
     }, [gameData, getWordsCount]);
 
 
-    const wordClickHandler = useCallback((i) => {
+    const wordClickHandler = useCallback(i => {
+        console.log(currentTeam)
         if (!winner && !isBlackWordClicked) {
             setGameData([
                     ...gameData.slice(0, i),
@@ -99,7 +100,9 @@ function App() {
             if (gameData[i].color === "black") {
                 setIsBlackWordClicked(true);
             } else if (gameData[i].color !== currentTeam) {
+                console.log("before", currentTeam)
                 setCurrentTeam(invertColor(currentTeam));
+                console.log("after", currentTeam)
             }
         }
     }, [gameData, currentTeam, winner, isBlackWordClicked, invertColor, clickedData, location]);
