@@ -61,7 +61,9 @@ function App() {
         const initialSetup = words.map((word, i) => ({word, color: colors[i], clicked: clickedData.includes(word)}));
 
         setGameData(initialSetup);
-        setCurrentTeam(colorOptions[0]);
+        if (clickedData.length === 0) {
+            setCurrentTeam(colorOptions[0]);
+        }
     }, [location, clickedData]);
 
     useEffect(() => {
@@ -70,6 +72,9 @@ function App() {
             .doc(location.pathname.slice(1))
             .onSnapshot(querySnapshot => {
             setClickedData(querySnapshot.data()?.words || []);
+            if (querySnapshot.data()?.currentTeam) {
+                setCurrentTeam(querySnapshot.data().currentTeam);
+            }
         });
 
     }, [location]);
@@ -86,7 +91,6 @@ function App() {
 
 
     const wordClickHandler = useCallback(async i => {
-        console.log(currentTeam)
         if (!winner && !isBlackWordClicked) {
             setGameData([
                     ...gameData.slice(0, i),
@@ -96,13 +100,15 @@ function App() {
             );
             await db.collection("pokemon")
                 .doc(location.pathname.slice(1))
-                .set({words: [...clickedData, gameData[i].word]}, {merge: true});
+                .set({words: [gameData[i].word, ...clickedData]}, {merge: true});
             if (gameData[i].color === "black") {
                 setIsBlackWordClicked(true);
             } else if (gameData[i].color !== currentTeam) {
-                console.log("before", currentTeam)
-                setCurrentTeam(invertColor(currentTeam));
-                console.log("after", currentTeam)
+                const newTeam = invertColor(currentTeam);
+                //setCurrentTeam(newTeam);
+                await db.collection("pokemon")
+                .doc(location.pathname.slice(1))
+                .set({currentTeam: newTeam}, {merge: true});
             }
         }
     }, [gameData, currentTeam, winner, isBlackWordClicked, invertColor, clickedData, location]);
