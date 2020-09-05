@@ -72,7 +72,7 @@ function App() {
             setClickedData(querySnapshot.data()?.words || []);
         });
 
-}, [location]);
+    }, [location]);
 
     useEffect(() => {
         if (gameData.length > 0) {
@@ -85,7 +85,7 @@ function App() {
     }, [gameData, getWordsCount]);
 
 
-    const wordClickHandler = useCallback(i => {
+    const wordClickHandler = useCallback(async i => {
         console.log(currentTeam)
         if (!winner && !isBlackWordClicked) {
             setGameData([
@@ -94,7 +94,7 @@ function App() {
                     ...gameData.slice(i + 1)
                 ]
             );
-            db.collection("pokemon")
+            await db.collection("pokemon")
                 .doc(location.pathname.slice(1))
                 .set({words: [...clickedData, gameData[i].word]}, {merge: true});
             if (gameData[i].color === "black") {
