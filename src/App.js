@@ -2,6 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import Chance from 'chance';
 import {useHistory} from 'react-router-dom';
+import { db } from "./firebase";
+
 
 const TEAM = {
     red: 'red',
@@ -25,15 +27,16 @@ function App() {
         }
     }
 
-    const invertColor = useCallback((color) => color === TEAM.red ? TEAM.blue : TEAM.red, []);
-    const getWordsCount = colour => gameData.filter(i => i.color === colour && i.clicked === false).length;
-
     const {location} = useHistory();
-    const [isGameCreated, setIsGameCreated] = useState(false);
     const [gameData, setGameData] = useState([]);
     const [currentTeam, setCurrentTeam] = useState();
     const [isBlackWordClicked, setIsBlackWordClicked] = useState(false);
-    const [winner, setWinner] = useState();
+    const [winner, setWinner] = useState(null);
+    const [clickedData, setClickedData] = useState([]);
+
+    const invertColor = useCallback((color) => color === TEAM.red ? TEAM.blue : TEAM.red, []);
+    const getWordsCount = useCallback(colour => gameData.filter(i => i.color === colour && i.clicked === false).length, [gameData]);
+
 
     useEffect(() => {
 
@@ -41,7 +44,7 @@ function App() {
             'вечер', 'взгляд', 'вид', 'вилка', 'вирус', 'виски', 'вода', 'водолаз', 'вождь', 'воздух', 'война', 'волна',
             'воля', 'вор', 'ворот', 'ворота', 'врач', 'время', 'выпечка', 'высота', 'выступление', 'гавань', 'газ', 'газель',
             'галоп', 'гвоздь', 'гений', 'герб', 'Германия', 'герой', 'гигант', 'глаз', 'Голливуд', 'голова', 'голос',
-            'го­лубь', 'гольф', 'гора', 'горло', 'горн', 'город', 'Горький', 'град', 'гранат', 'гранит', 'гребень', 'Греция',
+            'голубь', 'гольф', 'гора', 'горло', 'горн', 'город', 'Горький', 'град', 'гранат', 'гранит', 'гребень', 'Греция',
             'гриф', 'группа', 'груша', 'губа'];
 
         const chance1 = new Chance(location.pathname);
@@ -55,25 +58,30 @@ function App() {
 
         const words = chance1.shuffle(dictionary).slice(0, fieldSize);
 
-        const initialSetup = words.map((word, i) => ({word, color: colors[i], clicked: false}));
+        const initialSetup = words.map((word, i) => ({word, color: colors[i], clicked: clickedData.includes(word)}));
 
         setGameData(initialSetup);
         setCurrentTeam(colorOptions[0]);
-        setIsGameCreated(true);
-    }, [location]);
+    }, [location, clickedData]);
 
     useEffect(() => {
 
-        if (isGameCreated) {
-            console.log(getWordsCount(TEAM.red));
-            console.log(getWordsCount(TEAM.blue));
+        db.collection("pokemon").doc(location.pathname.slice(1)).onSnapshot(querySnapshot => {
+            setClickedData(querySnapshot.data()?.words || []);
+        });
+
+}, [location]);
+
+    useEffect(() => {
+        if (gameData.length > 0) {
             if (getWordsCount(TEAM.red) === 0) {
                 setWinner(TEAM.red);
             } else if (getWordsCount(TEAM.blue) === 0) {
                 setWinner(TEAM.blue);
             }
         }
-    }, [gameData, getWordsCount, isGameCreated]);
+    }, [gameData, getWordsCount]);
+
 
     const wordClickHandler = useCallback((i) => {
         if (!winner && !isBlackWordClicked) {
@@ -83,13 +91,16 @@ function App() {
                     ...gameData.slice(i + 1)
                 ]
             );
+            db.collection("pokemon")
+                .doc(location.pathname.slice(1))
+                .update({words: [...clickedData, gameData[i].word]});
             if (gameData[i].color === "black") {
                 setIsBlackWordClicked(true);
             } else if (gameData[i].color !== currentTeam) {
                 setCurrentTeam(invertColor(currentTeam));
             }
         }
-    }, [gameData, currentTeam, winner, isBlackWordClicked]);
+    }, [gameData, currentTeam, winner, isBlackWordClicked, invertColor, clickedData, location]);
 
     const TopBanner = () => {
         if (isBlackWordClicked) {
