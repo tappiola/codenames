@@ -93,7 +93,7 @@ function App() {
             );
             db.collection("pokemon")
                 .doc(location.pathname.slice(1))
-                .update({words: [...clickedData, gameData[i].word]});
+                .set({words: [...clickedData, gameData[i].word]}, {merge: true});
             if (gameData[i].color === "black") {
                 setIsBlackWordClicked(true);
             } else if (gameData[i].color !== currentTeam) {
