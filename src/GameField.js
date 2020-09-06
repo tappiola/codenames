@@ -132,15 +132,18 @@ function GameField() {
 
 
     const TopBanner = () => {
+
+        const button = (playerRole === ROLE.player && !winner && ! isBlackWordClicked) && <button onClick={() => setCurrentTeam(invertColor(currentTeam))}>Закончить ход</button>
+
         if (isBlackWordClicked) {
-            return <div className={"top-banner black"}>Команда, нажавшая черное слово, проиграла</div>
+            return <div className={"top-banner black"}>Команда, нажавшая черное слово, проиграла{button}</div>
         }
 
         if (winner) {
-            return <div className={"top-banner " + currentTeam}>{MESSAGES.WINNER[currentTeam]}</div>
+            return <div className={"top-banner " + currentTeam}>{MESSAGES.WINNER[currentTeam]}{button}</div>
         }
 
-        return <div className={"top-banner " + currentTeam}>{MESSAGES.YOUR_TURN[currentTeam]}</div>
+        return <div className={"top-banner " + currentTeam}>{MESSAGES.YOUR_TURN[currentTeam]}{button}</div>
     }
 
     const WordsCounter = props => <div className={"words-counter " + props.colour}>{getWordsCount(props.colour)}</div>
