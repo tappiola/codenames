@@ -45,9 +45,20 @@ function GameField() {
     const [winner, setWinner] = useState(null);
     const [clickedData, setClickedData] = useState([]);
     const [playerRole, setPlayerRole] = useState(null);
+    const [clicksCurrentRound, setClicksCurrentRound] = useState(0);
 
     const invertColor = useCallback(colour => colour === TEAM.red ? TEAM.blue : TEAM.red, []);
     const getWordsCount = useCallback(colour => gameData.filter(i => i.color === colour && i.clicked === false).length, [gameData]);
+
+    const changeTeam = useCallback(async () => {
+        console.log('change team');
+        console.log(clicksCurrentRound);
+        setClicksCurrentRound(0);
+        const newTeam = invertColor(currentTeam);
+        await db.collection("game")
+            .doc(location.pathname.slice(1))
+            .set({currentTeam: newTeam}, {merge: true});
+    }, [currentTeam, invertColor, location.pathname]);
 
 
     useEffect(() => {
@@ -122,18 +133,19 @@ function GameField() {
                 .doc(location.pathname.slice(1))
                 .set({words: [gameData[i].word, ...clickedData]}, {merge: true});
             if (gameData[i].color !== currentTeam) {
-                const newTeam = invertColor(currentTeam);
-                await db.collection("game")
-                    .doc(location.pathname.slice(1))
-                    .set({currentTeam: newTeam}, {merge: true});
+                await changeTeam();
+            } else {
+                setClicksCurrentRound(clicksCurrentRound + 1);
             }
         }
-    }, [gameData, currentTeam, winner, isBlackWordClicked, invertColor, clickedData, location, playerRole]);
+    }, [playerRole, clicksCurrentRound, winner, isBlackWordClicked, gameData, location.pathname,
+        clickedData, currentTeam, changeTeam]);
 
 
     const TopBanner = () => {
 
-        const button = (playerRole === ROLE.player && !winner && ! isBlackWordClicked) && <button onClick={() => setCurrentTeam(invertColor(currentTeam))}>Закончить ход</button>
+        const button = (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
+            <button onClick={() => changeTeam()}>Закончить ход</button>
 
         if (isBlackWordClicked) {
             return <div className={"top-banner black"}>Команда, нажавшая черное слово, проиграла{button}</div>
