@@ -72,3 +72,7 @@
     background-color: #e3e0e0;
     color: #313131;
 }
+
+.transparent{
+    opacity: 0.4;
+}
