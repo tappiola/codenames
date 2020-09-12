@@ -38,7 +38,7 @@ function GameField() {
         }
     }
 
-    const {location} = useHistory();
+    const {location: {pathname}} = useHistory();
     const [gameData, setGameData] = useState([]);
     const [currentTeam, setCurrentTeam] = useState();
     const [isBlackWordClicked, setIsBlackWordClicked] = useState(false);
@@ -50,15 +50,16 @@ function GameField() {
     const invertColor = useCallback(colour => colour === TEAM.red ? TEAM.blue : TEAM.red, []);
     const getWordsCount = useCallback(colour => gameData.filter(i => i.color === colour && i.clicked === false).length, [gameData]);
 
+
     const changeTeam = useCallback(async () => {
         console.log('change team');
         console.log(clicksCurrentRound);
         setClicksCurrentRound(0);
         const newTeam = invertColor(currentTeam);
         await db.collection("game")
-            .doc(location.pathname.slice(1))
+            .doc(pathname.slice(1))
             .set({currentTeam: newTeam}, {merge: true});
-    }, [currentTeam, invertColor, location.pathname]);
+    }, [currentTeam, invertColor, pathname]);
 
 
     useEffect(() => {
@@ -70,7 +71,7 @@ function GameField() {
             'голубь', 'гольф', 'гора', 'горло', 'горн', 'город', 'Горький', 'град', 'гранат', 'гранит', 'гребень', 'Греция',
             'гриф', 'группа', 'груша', 'губа'];
 
-        const chance1 = new Chance(location.pathname);
+        const chance1 = new Chance(pathname);
         const colorOptions = chance1.shuffle([TEAM.red, TEAM.blue]);
         const colors = chance1.shuffle([
             COLOUR.black,
@@ -87,13 +88,13 @@ function GameField() {
         if (clickedData.length === 0) {
             setCurrentTeam(colorOptions[0]);
         }
-    }, [location, clickedData]);
+    }, [pathname, clickedData]);
 
 
     useEffect(() => {
 
         db.collection("game")
-            .doc(location.pathname.slice(1))
+            .doc(pathname.slice(1))
             .onSnapshot(querySnapshot => {
                 setClickedData(querySnapshot.data()?.words || []);
                 if (querySnapshot.data()?.currentTeam) {
@@ -101,7 +102,7 @@ function GameField() {
                 }
             });
 
-    }, [location]);
+    }, [pathname]);
 
     useEffect(() => {
         if (gameData.length > 0) {
@@ -130,7 +131,7 @@ function GameField() {
                 ]
             );
             await db.collection("game")
-                .doc(location.pathname.slice(1))
+                .doc(pathname.slice(1))
                 .set({words: [gameData[i].word, ...clickedData]}, {merge: true});
             if (gameData[i].color !== currentTeam) {
                 await changeTeam();
@@ -138,7 +139,7 @@ function GameField() {
                 setClicksCurrentRound(clicksCurrentRound + 1);
             }
         }
-    }, [playerRole, clicksCurrentRound, winner, isBlackWordClicked, gameData, location.pathname,
+    }, [playerRole, clicksCurrentRound, winner, isBlackWordClicked, gameData, pathname,
         clickedData, currentTeam, changeTeam]);
 
 
@@ -165,7 +166,7 @@ function GameField() {
         'transparent': playerRole === ROLE.captain && wordData.clicked && wordData.color !== COLOUR.white
     });
 
-    const GameField = () => <>
+    const GameField = () => <div className="game-field">
         <TopBanner/>
         <div className="field">
             {gameData.map((i, index) => <div
@@ -182,12 +183,12 @@ function GameField() {
             <div className={"words-remaining"}>Слов осталось</div>
             <WordsCounter colour={TEAM.blue}/>
         </div>
-    </>
+    </div>
 
-    const RoleSelect = () => <>
+    const RoleSelect = () => <div>
         <button onClick={() => setPlayerRole(ROLE.captain)}>{ROLE.captain}</button>
         <button onClick={() => setPlayerRole(ROLE.player)}>{ROLE.player}</button>
-    </>
+    </div>
 
 
     if (!playerRole) {
