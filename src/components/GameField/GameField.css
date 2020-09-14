@@ -9,15 +9,15 @@
 }
 
 @media only screen and (min-height: 500px) {
-  .game-field {
-    grid-template-rows: 3rem auto 10%;
-  }
+    .game-field {
+        grid-template-rows: 3rem auto 10%;
+    }
 }
 
 .field {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-gap: 5%  2.5%;
+    grid-gap: 5% 2.5%;
     margin: 2% 2rem;
     justify-items: center;
 }
@@ -84,7 +84,7 @@
     height: 100%;
 }
 
-.transparent{
+.transparent {
     opacity: 0.4;
 }
 

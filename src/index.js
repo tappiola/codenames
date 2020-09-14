@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter, Route} from 'react-router-dom';
-import GameField from "./components/GameField/GameField";
 
 ReactDOM.render(
     <React.StrictMode>

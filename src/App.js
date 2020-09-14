@@ -15,13 +15,12 @@ function App() {
     const [playerRole, setPlayerRole] = useState(null);
 
     useEffect(() => {
-        const keyword = history.location.pathname.slice(1);
-        if (keyword){
-            setGameKeyword(keyword);
-        } else {
+        const keyword = history.location.pathname.slice(1).toLowerCase();
+        setGameKeyword(keyword);
+        if (!keyword) {
             setNewGameSelectionMode(true);
         }
-    }, [history])
+    }, [history.location])
 
     const gameCreateHandler = (keyword, role) => {
         history.push('/' + keyword);
@@ -36,19 +35,20 @@ function App() {
     </div>
 
     return <>
-            {newGameSelectionMode && <NewGameModal
-                onGameCreate={gameCreateHandler}
-                onNewGameCancel={() => setNewGameSelectionMode(false)}
-            />}
-        {!playerRole
+        {newGameSelectionMode && <NewGameModal
+            onGameCreate={gameCreateHandler}
+            onNewGameCancel={() => setNewGameSelectionMode(false)}
+            showOnlyModal={gameKeyword.length === 0}
+        />}
+        {gameKeyword && (!playerRole
             ? <RoleSelect/>
-            : gameKeyword ? <GameField
+            : <GameField
                 gameKeyword={gameKeyword}
                 playerRole={playerRole}
                 onNewGameStart={() => setNewGameSelectionMode(true)}
-            />
-            : null}
-        </>
+            />)
+        }
+    </>
 }
 
 export default App;

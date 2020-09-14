@@ -142,14 +142,17 @@ function GameField(props) {
     const TopBanner = () => {
 
         if (isBlackWordClicked) {
-            return <div className={"top-banner black"}>Команда, нажавшая черное слово, проиграла{<EndRoundButton/>}{<NewGameButton/>}</div>
+            return <div className={"top-banner black"}>Команда, нажавшая черное слово, проиграла{<EndRoundButton/>}{
+                <NewGameButton/>}</div>
         }
 
         if (winner) {
-            return <div className={"top-banner " + currentTeam}>{MESSAGES.WINNER[currentTeam]}{<EndRoundButton/>}{<NewGameButton/>}</div>
+            return <div className={"top-banner " + currentTeam}>{MESSAGES.WINNER[currentTeam]}{<EndRoundButton/>}{
+                <NewGameButton/>}</div>
         }
 
-        return <div className={"top-banner " + currentTeam}>{MESSAGES.YOUR_TURN[currentTeam]}{<EndRoundButton/>}{<NewGameButton/>}</div>
+        return <div className={"top-banner " + currentTeam}>{MESSAGES.YOUR_TURN[currentTeam]}{<EndRoundButton/>}{
+            <NewGameButton/>}</div>
     }
 
     const WordsCounter = props => <div className={"words-counter " + props.colour}>{getWordsCount(props.colour)}</div>
