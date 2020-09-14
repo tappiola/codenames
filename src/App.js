@@ -1,19 +1,54 @@
-import React  from 'react';
-import './App.css';
-import {Switch, Route} from 'react-router-dom';
-import GameField from './GameField';
+import React, {useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
+import GameField from './components/GameField/GameField';
+import {NewGameModal} from "./components/NewGameModal/NewGameModal";
 
+export const ROLE = {
+    captain: 'капитан',
+    player: 'игрок'
+}
 
 function App() {
+    const history = useHistory();
+    const [newGameSelectionMode, setNewGameSelectionMode] = useState(false);
+    const [gameKeyword, setGameKeyword] = useState('');
+    const [playerRole, setPlayerRole] = useState(null);
 
-    const NewGame = () => {
-        return <div>New game</div>
+    useEffect(() => {
+        const keyword = history.location.pathname.slice(1);
+        if (keyword){
+            setGameKeyword(keyword);
+        } else {
+            setNewGameSelectionMode(true);
+        }
+    }, [history])
+
+    const gameCreateHandler = (keyword, role) => {
+        history.push('/' + keyword);
+        setPlayerRole(role);
+        setGameKeyword(keyword);
+        setNewGameSelectionMode(false);
     }
 
-    return <Switch>
-        <Route exact path="/" component={NewGame}/>
-        <Route path="/:keyword" component={GameField}/>
-    </Switch>
+    const RoleSelect = () => <div className="select-role">
+        <button className="select-role__button" onClick={() => setPlayerRole(ROLE.captain)}>{ROLE.captain}</button>
+        <button className="select-role__button" onClick={() => setPlayerRole(ROLE.player)}>{ROLE.player}</button>
+    </div>
+
+    return <>
+            {newGameSelectionMode && <NewGameModal
+                onGameCreate={gameCreateHandler}
+                onNewGameCancel={() => setNewGameSelectionMode(false)}
+            />}
+        {!playerRole
+            ? <RoleSelect/>
+            : gameKeyword ? <GameField
+                gameKeyword={gameKeyword}
+                playerRole={playerRole}
+                onNewGameStart={() => setNewGameSelectionMode(true)}
+            />
+            : null}
+        </>
 }
 
 export default App;

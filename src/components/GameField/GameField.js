@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import './App.css';
 import Chance from 'chance';
-import {useHistory} from 'react-router-dom';
-import {db} from "./firebase";
+import {db} from "../../firebase";
 import clsx from 'clsx';
+import './GameField.css';
+import {ROLE} from '../../App';
 
 
 const TEAM = {
@@ -16,12 +16,7 @@ const COLOUR = {
     black: 'black'
 }
 
-const ROLE = {
-    captain: 'капитан',
-    player: 'игрок'
-}
-
-function GameField() {
+function GameField(props) {
 
     const fieldSize = 25;
     const whiteWordsCount = 7;
@@ -38,13 +33,12 @@ function GameField() {
         }
     }
 
-    const {location: {pathname}} = useHistory();
+    const {gameKeyword, playerRole} = props;
     const [gameData, setGameData] = useState([]);
     const [currentTeam, setCurrentTeam] = useState();
     const [isBlackWordClicked, setIsBlackWordClicked] = useState(false);
     const [winner, setWinner] = useState(null);
     const [clickedData, setClickedData] = useState([]);
-    const [playerRole, setPlayerRole] = useState(null);
     const [clicksCurrentRound, setClicksCurrentRound] = useState(0);
 
     const invertColor = useCallback(colour => colour === TEAM.red ? TEAM.blue : TEAM.red, []);
@@ -52,14 +46,12 @@ function GameField() {
 
 
     const changeTeam = useCallback(async () => {
-        console.log('change team');
-        console.log(clicksCurrentRound);
         setClicksCurrentRound(0);
         const newTeam = invertColor(currentTeam);
         await db.collection("game")
-            .doc(pathname.slice(1))
+            .doc(gameKeyword)
             .set({currentTeam: newTeam}, {merge: true});
-    }, [currentTeam, invertColor, pathname]);
+    }, [currentTeam, invertColor, gameKeyword]);
 
 
     useEffect(() => {
@@ -71,7 +63,7 @@ function GameField() {
             'голубь', 'гольф', 'гора', 'горло', 'горн', 'город', 'Горький', 'град', 'гранат', 'гранит', 'гребень', 'Греция',
             'гриф', 'группа', 'груша', 'губа'];
 
-        const chance1 = new Chance(pathname);
+        const chance1 = new Chance(gameKeyword);
         const colorOptions = chance1.shuffle([TEAM.red, TEAM.blue]);
         const colors = chance1.shuffle([
             COLOUR.black,
@@ -88,13 +80,13 @@ function GameField() {
         if (clickedData.length === 0) {
             setCurrentTeam(colorOptions[0]);
         }
-    }, [pathname, clickedData]);
+    }, [clickedData, gameKeyword]);
 
 
     useEffect(() => {
 
         db.collection("game")
-            .doc(pathname.slice(1))
+            .doc(gameKeyword)
             .onSnapshot(querySnapshot => {
                 setClickedData(querySnapshot.data()?.words || []);
                 if (querySnapshot.data()?.currentTeam) {
@@ -102,7 +94,7 @@ function GameField() {
                 }
             });
 
-    }, [pathname]);
+    }, [gameKeyword]);
 
     useEffect(() => {
         if (gameData.length > 0) {
@@ -131,7 +123,7 @@ function GameField() {
                 ]
             );
             await db.collection("game")
-                .doc(pathname.slice(1))
+                .doc(gameKeyword)
                 .set({words: [gameData[i].word, ...clickedData]}, {merge: true});
             if (gameData[i].color !== currentTeam) {
                 await changeTeam();
@@ -139,24 +131,25 @@ function GameField() {
                 setClicksCurrentRound(clicksCurrentRound + 1);
             }
         }
-    }, [playerRole, clicksCurrentRound, winner, isBlackWordClicked, gameData, pathname,
+    }, [playerRole, clicksCurrentRound, winner, isBlackWordClicked, gameData, gameKeyword,
         clickedData, currentTeam, changeTeam]);
 
+    const EndRoundButton = () => (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
+        <button onClick={() => changeTeam()}>Закончить ход</button>
+
+    const NewGameButton = () => <button onClick={props.onNewGameStart}>Новая игра</button>
 
     const TopBanner = () => {
 
-        const button = (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
-            <button onClick={() => changeTeam()}>Закончить ход</button>
-
         if (isBlackWordClicked) {
-            return <div className={"top-banner black"}>Команда, нажавшая черное слово, проиграла{button}</div>
+            return <div className={"top-banner black"}>Команда, нажавшая черное слово, проиграла{<EndRoundButton/>}{<NewGameButton/>}</div>
         }
 
         if (winner) {
-            return <div className={"top-banner " + currentTeam}>{MESSAGES.WINNER[currentTeam]}{button}</div>
+            return <div className={"top-banner " + currentTeam}>{MESSAGES.WINNER[currentTeam]}{<EndRoundButton/>}{<NewGameButton/>}</div>
         }
 
-        return <div className={"top-banner " + currentTeam}>{MESSAGES.YOUR_TURN[currentTeam]}{button}</div>
+        return <div className={"top-banner " + currentTeam}>{MESSAGES.YOUR_TURN[currentTeam]}{<EndRoundButton/>}{<NewGameButton/>}</div>
     }
 
     const WordsCounter = props => <div className={"words-counter " + props.colour}>{getWordsCount(props.colour)}</div>
@@ -166,7 +159,8 @@ function GameField() {
         'transparent': playerRole === ROLE.captain && wordData.clicked && wordData.color !== COLOUR.white
     });
 
-    const GameField = () => <div className="game-field">
+
+    return <div className="game-field">
         <TopBanner/>
         <div className="field">
             {gameData.map((i, index) => <div
@@ -184,18 +178,6 @@ function GameField() {
             <WordsCounter colour={TEAM.blue}/>
         </div>
     </div>
-
-    const RoleSelect = () => <div>
-        <button onClick={() => setPlayerRole(ROLE.captain)}>{ROLE.captain}</button>
-        <button onClick={() => setPlayerRole(ROLE.player)}>{ROLE.player}</button>
-    </div>
-
-
-    if (!playerRole) {
-        return <RoleSelect/>;
-    } else
-        return <GameField/>
-
 }
 
 export default GameField;
