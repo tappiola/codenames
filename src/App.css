@@ -1,0 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}

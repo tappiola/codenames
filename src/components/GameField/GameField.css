@@ -1,16 +1,26 @@
-* {
-    box-sizing: border-box;
-}
-
 .game-field {
     display: grid;
-    height: 100vh;
+    height: 100%;
+    width: 100vw;
     grid-template-rows: 2.5rem auto 10%;
 }
 
 @media only screen and (min-height: 500px) {
     .game-field {
         grid-template-rows: 3rem auto 10%;
+    }
+}
+
+/* Support screen orientation change */
+@media screen and (orientation: portrait) {
+    .game-field {
+        grid-template-rows: 10% auto 10%;
+        transform: rotate(90deg);
+        transform-origin: top left;
+        height: 100vw;
+        width: 100vh;
+        position: absolute;
+        left: 100vw;
     }
 }
 
@@ -35,6 +45,20 @@
     cursor: pointer;
     font-size: 1.5rem;
 }
+
+/* Reduce font size for smaller screens */
+@media only screen and (orientation: landscape) and (max-height: 500px) {
+    .word {
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (orientation: portrait) and (max-width: 500px) {
+    .word {
+        font-size: 0.9rem;
+    }
+}
+
 
 .red {
     background-color: indianred;
