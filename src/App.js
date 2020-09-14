@@ -17,9 +17,7 @@ function App() {
     useEffect(() => {
         const keyword = history.location.pathname.slice(1).toLowerCase();
         setGameKeyword(keyword);
-        if (!keyword) {
-            setNewGameSelectionMode(true);
-        }
+        setNewGameSelectionMode(keyword.length === 0);
     }, [history.location])
 
     const gameCreateHandler = (keyword, role) => {
