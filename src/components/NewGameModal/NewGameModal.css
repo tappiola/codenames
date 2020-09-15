@@ -1,6 +1,18 @@
+.backdrop {
+    background-color: #282828;
+    opacity: 0.6;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+}
+
 .new-game {
     position: absolute;
-    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
     width: 350px;
     height: 450px;
     border: 1px solid gray;

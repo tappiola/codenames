@@ -111,18 +111,3 @@
 .transparent {
     opacity: 0.4;
 }
-
-.select-role {
-    display: block;
-    text-align: center;
-    height: 100%;
-}
-
-.select-role__button {
-    height: 3rem;
-    width: 8rem;
-    border: 1px solid gray;
-    font-size: 16px;
-    text-transform: uppercase;
-    cursor: pointer;
-}

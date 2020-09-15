@@ -140,19 +140,16 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
     const NewGameButton = () => <button onClick={onNewGameStart}>Новая игра</button>
 
     const TopBanner = () => {
-
-        if (isBlackWordClicked) {
-            return <div className={"top-banner black"}>Команда, нажавшая черное слово, проиграла{<EndRoundButton/>}{
-                <NewGameButton/>}</div>
-        }
-
-        if (winner) {
-            return <div className={"top-banner " + currentTeam}>{MESSAGES.WINNER[currentTeam]}{<EndRoundButton/>}{
-                <NewGameButton/>}</div>
-        }
-
-        return <div className={"top-banner " + currentTeam}>{MESSAGES.YOUR_TURN[currentTeam]}{<EndRoundButton/>}{
-            <NewGameButton/>}</div>
+        return (
+            <div className={clsx("top-banner", isBlackWordClicked ? 'black' : currentTeam)}>
+                {isBlackWordClicked
+                    ? "Команда, нажавшая черное слово, проиграла"
+                    : winner ? MESSAGES.WINNER[currentTeam] : MESSAGES.YOUR_TURN[currentTeam]
+                }
+                <EndRoundButton/>
+                <NewGameButton/>
+            </div>
+        )
     }
 
     const WordsCounter = ({colour}) => <div className={"words-counter " + colour}>{getWordsCount(colour)}</div>

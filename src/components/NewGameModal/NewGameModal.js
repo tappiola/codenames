@@ -21,23 +21,26 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showOnlyModal}) => 
         onClick={() => onGameCreate(newGameKeyword, data.role)}
     >{data.role}</button>
 
-    return <div className="new-game">
-        {showOnlyModal || <button onClick={onNewGameCancel}>x</button>}
-        <div>Новая игра</div>
-        <input
-            className="new-game__input"
-            placeholder="Ключевое слово"
-            maxLength="16"
-            onKeyDown={e => restrictInput(e)}
-            onChange={e => setNewGameKeyword(e.target.value.toLowerCase())}
-            value={newGameKeyword}
-        />
-        <button>Сгенерировать другой ключ</button>
-        <div>Открыть игру как:</div>
-        <div>
-            <NewGameButton role={ROLE.captain}/>
-            <NewGameButton role={ROLE.player}/>
+    return <>
+        <div className="backdrop"/>
+        <div className="new-game">
+            {showOnlyModal || <button onClick={onNewGameCancel}>x</button>}
+            <div>Новая игра</div>
+            <input
+                className="new-game__input"
+                placeholder="Ключевое слово"
+                maxLength="16"
+                onKeyDown={e => restrictInput(e)}
+                onChange={e => setNewGameKeyword(e.target.value.toLowerCase())}
+                value={newGameKeyword}
+            />
+            <button>Сгенерировать другой ключ</button>
+            <div>Открыть игру как:</div>
+            <div>
+                <NewGameButton role={ROLE.captain}/>
+                <NewGameButton role={ROLE.player}/>
+            </div>
         </div>
-    </div>
+    </>
 }
 

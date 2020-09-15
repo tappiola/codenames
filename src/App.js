@@ -29,6 +29,7 @@ function App() {
     }
 
     const RoleSelect = () => <div className="select-role">
+        <div className="select-role__label">Зайти в игру как:</div>
         <button className="select-role__button" onClick={() => setPlayerRole(ROLE.captain)}>{ROLE.captain}</button>
         <button className="select-role__button" onClick={() => setPlayerRole(ROLE.player)}>{ROLE.player}</button>
     </div>
