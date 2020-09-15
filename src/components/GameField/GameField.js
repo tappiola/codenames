@@ -16,7 +16,7 @@ const COLOUR = {
     black: 'black'
 }
 
-function GameField(props) {
+const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
 
     const fieldSize = 25;
     const whiteWordsCount = 7;
@@ -33,7 +33,6 @@ function GameField(props) {
         }
     }
 
-    const {gameKeyword, playerRole} = props;
     const [gameData, setGameData] = useState([]);
     const [currentTeam, setCurrentTeam] = useState();
     const [isBlackWordClicked, setIsBlackWordClicked] = useState(false);
@@ -77,6 +76,7 @@ function GameField(props) {
         const initialSetup = words.map((word, i) => ({word, color: colors[i], clicked: clickedData.includes(word)}));
 
         setGameData(initialSetup);
+        setIsBlackWordClicked(false);
         if (clickedData.length === 0) {
             setCurrentTeam(colorOptions[0]);
         }
@@ -137,7 +137,7 @@ function GameField(props) {
     const EndRoundButton = () => (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
         <button onClick={() => changeTeam()}>Закончить ход</button>
 
-    const NewGameButton = () => <button onClick={props.onNewGameStart}>Новая игра</button>
+    const NewGameButton = () => <button onClick={onNewGameStart}>Новая игра</button>
 
     const TopBanner = () => {
 
@@ -155,7 +155,7 @@ function GameField(props) {
             <NewGameButton/>}</div>
     }
 
-    const WordsCounter = props => <div className={"words-counter " + props.colour}>{getWordsCount(props.colour)}</div>
+    const WordsCounter = ({colour}) => <div className={"words-counter " + colour}>{getWordsCount(colour)}</div>
 
     const getClassNames = wordData => clsx("word", {
         [wordData.color]: (playerRole === ROLE.captain && wordData.color !== COLOUR.white) || wordData.clicked,

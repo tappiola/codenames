@@ -3,7 +3,7 @@ import './NewGameModal.css';
 import {ROLE} from '../../App';
 
 
-export const NewGameModal = props => {
+export const NewGameModal = ({onGameCreate, onNewGameCancel, showOnlyModal}) => {
     const [newGameKeyword, setNewGameKeyword] = useState('');
 
     const ALWAYS_ALLOWED_KEYS = ["Backspace", "ArrowLeft", "ArrowRight", "Tab"];
@@ -18,11 +18,11 @@ export const NewGameModal = props => {
     const NewGameButton = data => <button
         className="select-role__button"
         disabled={!newGameKeyword}
-        onClick={() => props.onGameCreate(newGameKeyword, data.role)}
+        onClick={() => onGameCreate(newGameKeyword, data.role)}
     >{data.role}</button>
 
     return <div className="new-game">
-        {props.showOnlyModal || <button onClick={props.onNewGameCancel}>x</button>}
+        {showOnlyModal || <button onClick={onNewGameCancel}>x</button>}
         <div>Новая игра</div>
         <input
             className="new-game__input"
