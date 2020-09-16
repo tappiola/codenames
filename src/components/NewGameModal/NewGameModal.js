@@ -39,7 +39,8 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
                 <button
                     className="new-game__button"
                     onClick={() => setNewGameKeyword(generateRandomWord())}
-                >Сгенерировать другой ключ</button>
+                >Сгенерировать другой ключ
+                </button>
             </div>
             <div>
                 <div className="new-game__label">Открыть игру как:</div>

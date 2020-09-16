@@ -25,11 +25,8 @@ export const fetchGameData = async (keyword, func) => {
 
 export const fetchKeywords = async () => {
 
-    let dict = [];
-    await COLLECTION.DICTS_RU.doc('5').get()
-        .then(function (querySnapshot) {
-        console.log(querySnapshot.data()['words']);
-        dict = querySnapshot.data()['words'];
-    });
-    return dict;
+    const snapshot = await COLLECTION.DICTS_RU.get();
+    const index = Math.floor(Math.random() * snapshot.docs.length);
+    console.log(index);
+    return snapshot.docs.map(doc => doc.data()['words'])[index];
 }
