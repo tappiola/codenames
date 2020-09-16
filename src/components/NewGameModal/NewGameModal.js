@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import './NewGameModal.css';
-import {ROLE} from '../../App';
+import {ROLE} from '../../constants';
 
 
 export const NewGameModal = ({onGameCreate, onNewGameCancel, showOnlyModal}) => {

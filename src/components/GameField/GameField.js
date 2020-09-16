@@ -1,26 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import Chance from 'chance';
-import {db} from "../../firebase";
 import clsx from 'clsx';
 import './GameField.css';
-import {ROLE} from '../../App';
-
-
-const TEAM = {
-    red: 'red',
-    blue: 'blue'
-}
-
-const COLOUR = {
-    white: 'white',
-    black: 'black'
-}
+import {fetchGameData, updateCurrentTeam, updateGameStatus} from "../../firebaseActions";
+import {COLOUR, ROLE, TEAM} from '../../constants';
+import {generateGame} from "../../service/wordGenerator";
 
 const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
-
-    const fieldSize = 25;
-    const whiteWordsCount = 7;
-
 
     const MESSAGES = {
         YOUR_TURN: {
@@ -47,53 +32,34 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
     const changeTeam = useCallback(async () => {
         setClicksCurrentRound(0);
         const newTeam = invertColor(currentTeam);
-        await db.collection("game")
-            .doc(gameKeyword)
-            .set({currentTeam: newTeam}, {merge: true});
+        await updateCurrentTeam(gameKeyword, newTeam);
     }, [currentTeam, invertColor, gameKeyword]);
 
 
     useEffect(() => {
 
-        const dictionary = ['ведьма', 'век', 'великан', 'венец', 'вера', 'вертолёт', 'верфь', 'вес', 'весна', 'ветер',
-            'вечер', 'взгляд', 'вид', 'вилка', 'вирус', 'виски', 'вода', 'водолаз', 'вождь', 'воздух', 'война', 'волна',
-            'воля', 'вор', 'ворот', 'ворота', 'врач', 'время', 'выпечка', 'высота', 'выступление', 'гавань', 'газ', 'газель',
-            'галоп', 'гвоздь', 'гений', 'герб', 'Германия', 'герой', 'гигант', 'глаз', 'Голливуд', 'голова', 'голос',
-            'голубь', 'гольф', 'гора', 'горло', 'горн', 'город', 'Горький', 'град', 'гранат', 'гранит', 'гребень', 'Греция',
-            'гриф', 'группа', 'груша', 'губа'];
-
-        const chance1 = new Chance(gameKeyword);
-        const colorOptions = chance1.shuffle([TEAM.red, TEAM.blue]);
-        const colors = chance1.shuffle([
-            COLOUR.black,
-            ...Array((fieldSize - whiteWordsCount) / 2).fill(colorOptions[0]),
-            ...Array((fieldSize - whiteWordsCount) / 2 - 1).fill(colorOptions[1]),
-            ...Array(whiteWordsCount).fill(COLOUR.white)
-        ]);
-
-        const words = chance1.shuffle(dictionary).slice(0, fieldSize);
-
-        const initialSetup = words.map((word, i) => ({word, color: colors[i], clicked: clickedData.includes(word)}));
+        const [gameSetup, firstTeam] = generateGame(gameKeyword);
+        const initialSetup = gameSetup.map(wordData => ({
+            ...wordData,
+            clicked: clickedData.includes(wordData.word)
+        }));
 
         setGameData(initialSetup);
         setIsBlackWordClicked(false);
         if (clickedData.length === 0) {
-            setCurrentTeam(colorOptions[0]);
+            setCurrentTeam(firstTeam);
         }
     }, [clickedData, gameKeyword]);
 
 
     useEffect(() => {
+        fetchGameData(gameKeyword, querySnapshot => {
+            setClickedData(querySnapshot.data()?.words || []);
+            if (querySnapshot.data()?.currentTeam) {
+                setCurrentTeam(querySnapshot.data().currentTeam);
+            }
 
-        db.collection("game")
-            .doc(gameKeyword)
-            .onSnapshot(querySnapshot => {
-                setClickedData(querySnapshot.data()?.words || []);
-                if (querySnapshot.data()?.currentTeam) {
-                    setCurrentTeam(querySnapshot.data().currentTeam);
-                }
-            });
-
+        })
     }, [gameKeyword]);
 
     useEffect(() => {
@@ -115,16 +81,14 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
 
 
     const wordClickHandler = useCallback(async i => {
-        if (playerRole === ROLE.player && !winner && !isBlackWordClicked) {
+        if (playerRole === ROLE.player && !winner && !isBlackWordClicked && !gameData[i].clicked) {
             setGameData([
                     ...gameData.slice(0, i),
                     {...gameData[i], clicked: true},
                     ...gameData.slice(i + 1)
                 ]
             );
-            await db.collection("game")
-                .doc(gameKeyword)
-                .set({words: [gameData[i].word, ...clickedData]}, {merge: true});
+            await updateGameStatus(gameKeyword, {words: [gameData[i].word, ...clickedData]});
             if (gameData[i].color !== currentTeam) {
                 await changeTeam();
             } else {
@@ -135,18 +99,22 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
         clickedData, currentTeam, changeTeam]);
 
     const EndRoundButton = () => (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
-        <button onClick={() => changeTeam()}>Закончить ход</button>
+        <button className="top-banner__button" onClick={() => changeTeam()}>Закончить ход</button>
 
-    const NewGameButton = () => <button onClick={onNewGameStart}>Новая игра</button>
+    const NewGameButton = () => <button className="top-banner__button" onClick={onNewGameStart}>Новая игра</button>
 
     const TopBanner = () => {
         return (
             <div className={clsx("top-banner", isBlackWordClicked ? 'black' : currentTeam)}>
+                <div className="top-banner__container">
+                    <span className="top-banner__status">
                 {isBlackWordClicked
                     ? "Команда, нажавшая черное слово, проиграла"
                     : winner ? MESSAGES.WINNER[currentTeam] : MESSAGES.YOUR_TURN[currentTeam]
                 }
-                <EndRoundButton/>
+                </span>
+                    <EndRoundButton/>
+                </div>
                 <NewGameButton/>
             </div>
         )

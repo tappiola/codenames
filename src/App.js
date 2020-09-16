@@ -3,11 +3,7 @@ import {useHistory} from 'react-router-dom';
 import GameField from './components/GameField/GameField';
 import {NewGameModal} from "./components/NewGameModal/NewGameModal";
 import './App.css';
-
-export const ROLE = {
-    captain: 'капитан',
-    player: 'игрок'
-}
+import {ROLE} from './constants';
 
 function App() {
     const history = useHistory();

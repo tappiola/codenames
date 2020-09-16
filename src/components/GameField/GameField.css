@@ -81,6 +81,9 @@
 }
 
 .top-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     color: white;
     padding: 0 2rem;
@@ -88,24 +91,42 @@
     font-size: 1rem;
 }
 
+.top-banner__container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.top-banner__button {
+    height: 70%;
+    font-size: 16px;
+}
+
+.top-banner__status {
+    margin-right: 1rem;
+}
+
+.bottom-banner {
+    display: grid;
+    grid-template-columns: 35% auto 35%;
+}
+
 .words-counter {
-    display: inline-block;
-    width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: white;
     font-weight: bold;
     font-size: 1.5rem;
-    text-align: center;
-    height: 100%;
 }
 
 .words-remaining {
-    display: inline-block;
-    width: 30%;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 1.5rem;
     background-color: #e3e0e0;
     color: #313131;
-    height: 100%;
 }
 
 .transparent {
