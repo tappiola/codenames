@@ -46,12 +46,12 @@
     font-size: 1.5rem;
 }
 
-.opened {
-    transition: transform 2s;
-    transform: rotateX(180deg);
-    transform-style: preserve-3d;
-    perspective: 1000px;
-}
+/*.opened {*/
+/*    transition: transform 2s;*/
+/*    transform: rotateX(180deg);*/
+/*    transform-style: preserve-3d;*/
+/*    perspective: 1000px;*/
+/*}*/
 
 /* Reduce font size for smaller screens */
 @media only screen and (orientation: landscape) and (max-height: 500px) {
