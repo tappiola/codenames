@@ -124,7 +124,8 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
 
     const getClassNames = wordData => clsx("word", {
         [wordData.color]: (playerRole === ROLE.captain && wordData.color !== COLOUR.white) || wordData.clicked,
-        'transparent': playerRole === ROLE.captain && wordData.clicked && wordData.color !== COLOUR.white
+        'transparent': playerRole === ROLE.captain && wordData.clicked && wordData.color !== COLOUR.white,
+        'opened': wordData.clicked
     });
 
 

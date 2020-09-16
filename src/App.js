@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import GameField from './components/GameField/GameField';
 import {NewGameModal} from "./components/NewGameModal/NewGameModal";
 import './App.css';
-import {ROLE} from './constants';
+import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
 
 function App() {
     const history = useHistory();
@@ -24,20 +24,14 @@ function App() {
         setNewGameSelectionMode(false);
     }
 
-    const RoleSelect = () => <div className="select-role">
-        <div className="select-role__label">Зайти в игру как:</div>
-        <button className="select-role__button" onClick={() => setPlayerRole(ROLE.captain)}>{ROLE.captain}</button>
-        <button className="select-role__button" onClick={() => setPlayerRole(ROLE.player)}>{ROLE.player}</button>
-    </div>
-
     return <>
         {newGameSelectionMode && <NewGameModal
             onGameCreate={gameCreateHandler}
             onNewGameCancel={() => setNewGameSelectionMode(false)}
-            showOnlyModal={gameKeyword.length === 0}
+            showCloseButton={gameKeyword.length > 0}
         />}
         {gameKeyword && (!playerRole
-            ? <RoleSelect/>
+            ? <RoleSelect onRoleSelect={role => setPlayerRole(role)}/>
             : <GameField
                 gameKeyword={gameKeyword}
                 playerRole={playerRole}

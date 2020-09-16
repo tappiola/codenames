@@ -4,7 +4,7 @@ import {ROLE} from '../../constants';
 import {generateRandomWord} from "../../service/wordGenerator";
 
 
-export const NewGameModal = ({onGameCreate, onNewGameCancel, showOnlyModal}) => {
+export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) => {
     const [newGameKeyword, setNewGameKeyword] = useState(generateRandomWord());
 
     const ALWAYS_ALLOWED_KEYS = ["Backspace", "ArrowLeft", "ArrowRight", "Tab"];
@@ -25,7 +25,7 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showOnlyModal}) => 
     return <>
         <div className="backdrop"/>
         <div className="new-game">
-            {showOnlyModal || <button onClick={onNewGameCancel}>x</button>}
+            {showCloseButton && <button className="close-modal" onClick={onNewGameCancel}>x</button>}
             <div className="new-game__label-big">Новая игра</div>
             <div>
                 <input

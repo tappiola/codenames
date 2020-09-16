@@ -46,6 +46,13 @@
     font-size: 1.5rem;
 }
 
+.opened {
+    transition: transform 2s;
+    transform: rotateX(180deg);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
 /* Reduce font size for smaller screens */
 @media only screen and (orientation: landscape) and (max-height: 500px) {
     .word {
@@ -100,6 +107,8 @@
 .top-banner__button {
     height: 70%;
     font-size: 16px;
+    border: 1px solid rgb(239, 239, 239);
+    border-radius: 2px;
 }
 
 .top-banner__status {
