@@ -1,7 +1,9 @@
 import {db} from './firebase';
 
-const COLLECTION = {
-    GAME: db.collection("game")
+export const COLLECTION = {
+    GAME: db.collection("game"),
+    DICTS_EN: db.collection("dicts_en"),
+    DICTS_RU: db.collection("dicts_ru")
 }
 
 export const updateCurrentTeam = async (keyword, team) => {
@@ -19,4 +21,15 @@ export const fetchGameData = async (keyword, func) => {
         .doc(keyword)
         //.where("timestamp", ">", + new Date() - oneHour)
         .onSnapshot(querySnapshot => func(querySnapshot));
+}
+
+export const fetchKeywords = async () => {
+
+    let dict = [];
+    await COLLECTION.DICTS_RU.doc('5').get()
+        .then(function (querySnapshot) {
+        console.log(querySnapshot.data()['words']);
+        dict = querySnapshot.data()['words'];
+    });
+    return dict;
 }

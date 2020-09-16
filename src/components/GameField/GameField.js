@@ -36,19 +36,22 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
     }, [currentTeam, invertColor, gameKeyword]);
 
 
-    useEffect(() => {
+    useEffect( () => {
 
-        const [gameSetup, firstTeam] = generateGame(gameKeyword);
-        const initialSetup = gameSetup.map(wordData => ({
-            ...wordData,
-            clicked: clickedData.includes(wordData.word)
-        }));
+        const setupGame = async () => {
+            const [gameSetup, firstTeam] = await generateGame(gameKeyword);
+            const initialSetup = gameSetup.map(wordData => ({
+                ...wordData,
+                clicked: clickedData.includes(wordData.word)
+            }));
 
-        setGameData(initialSetup);
-        setIsBlackWordClicked(false);
-        if (clickedData.length === 0) {
-            setCurrentTeam(firstTeam);
+            setGameData(initialSetup);
+            setIsBlackWordClicked(false);
+            if (clickedData.length === 0) {
+                setCurrentTeam(firstTeam);
+            }
         }
+        setupGame();
     }, [clickedData, gameKeyword]);
 
 
