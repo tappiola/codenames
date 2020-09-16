@@ -14,7 +14,7 @@
     transform: translate(-50%, -50%);
     z-index: 2;
     width: 350px;
-    height: 450px;
+    height: 400px;
     border: 1px solid gray;
     display: flex;
     flex-direction: column;
@@ -31,7 +31,24 @@
     height: 3rem;
     width: 100%;
     border: 1px solid gray;
-    border-radius: 2px;
-    margin: 0 5px;
-    padding: 0 5px;
+    padding: 0 10px;
+}
+
+.new-game__label {
+    text-align: center;
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+.new-game__label-big {
+    text-align: center;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.new-game__button {
+    height: 2rem;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 15px;
 }

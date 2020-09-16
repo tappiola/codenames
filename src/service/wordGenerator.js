@@ -22,3 +22,7 @@ export const generateGame = (gameKeyword) => {
     const gameData = words.map((word, i) => ({word, color: colors[i]}));
     return [gameData, colorOptions[0]];
 }
+
+export const generateRandomWord = () => {
+    return Math.random().toString(36).substr(2, 8);
+}
