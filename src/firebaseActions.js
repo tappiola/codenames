@@ -1,4 +1,5 @@
 import {db} from './firebase';
+import {selectRandomIndex} from "./service/wordGenerator";
 
 export const COLLECTION = {
     GAME: db.collection("game"),
@@ -16,17 +17,26 @@ export const updateGameStatus = async (keyword, newData) => {
 }
 
 export const fetchGameData = async (keyword, func) => {
-    const oneHour = 60 * 60 * 1000;
-    await COLLECTION.GAME
-        .doc(keyword)
-        //.where("timestamp", ">", + new Date() - oneHour)
-        .onSnapshot(querySnapshot => func(querySnapshot));
+    //const ONE_HOUR = 1 * 20 * 1000;
+    const ONE_HOUR = 60 * 60 * 1000;
+
+    const existingGameRef = await COLLECTION.GAME.doc(keyword);
+    const snapshot = await existingGameRef.get();
+
+    if (snapshot.exists) {
+
+        const gameDuration = new Date().getTime() - snapshot.get('timestamp');
+        if (gameDuration > ONE_HOUR) {
+            await snapshot.ref.delete()
+        }
+    }
+
+    existingGameRef.onSnapshot(querySnapshot => func(querySnapshot));
 }
 
-export const fetchKeywords = async () => {
+export const fetchDictionaries = async gameKeyword => {
 
     const snapshot = await COLLECTION.DICTS_RU.get();
-    const index = Math.floor(Math.random() * snapshot.docs.length);
-    console.log(index);
+    const index = selectRandomIndex(gameKeyword, snapshot.docs.length);
     return snapshot.docs.map(doc => doc.data()['words'])[index];
 }

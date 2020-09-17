@@ -6,7 +6,6 @@ const locales = ['en', 'ru'];
 
 for (const locale of locales) {
     const files = fs.readdirSync(`./${locale}`);
-    console.log(files)
     files.forEach(f => {
         const data = fs.readFileSync(`./${locale}/${f}`, {encoding: 'utf8'});
         const wordsInFile = data.split("\n");
