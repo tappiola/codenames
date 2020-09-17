@@ -5,6 +5,7 @@ import {NewGameModal} from "./components/NewGameModal/NewGameModal";
 import './App.css';
 import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
 import {LANGUAGES, TEXTS} from "./constants";
+import {LanguageSelector} from "./components/LanguageSelector/LanguageSelector";
 
 export const LanguageContext = React.createContext();
 
@@ -29,7 +30,12 @@ function App() {
         setNewGameSelectionMode(false);
     }
 
+    const setLanguage = language => {
+        setLocalizedTexts(TEXTS[language]);
+    }
+
     return <LanguageContext.Provider value={localizedTexts}>
+        <LanguageSelector onSetLanguage={setLanguage}/>
         {newGameSelectionMode && <NewGameModal
             onGameCreate={gameCreateHandler}
             onNewGameCancel={() => setNewGameSelectionMode(false)}

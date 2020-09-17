@@ -3,25 +3,30 @@ import {selectRandomIndex} from "./service/wordGenerator";
 import {LANGUAGES} from "./constants";
 
 export const COLLECTION = {
-    GAME: db.collection("game"),
-    [LANGUAGES.EN]: db.collection("dicts_en"),
-    [LANGUAGES.RU]: db.collection("dicts_ru")
+    GAME: {
+        [LANGUAGES.EN]: db.collection("game_en"),
+        [LANGUAGES.RU]: db.collection("game_ru"),
+    },
+    DICT: {
+        [LANGUAGES.EN]: db.collection("dicts_en"),
+        [LANGUAGES.RU]: db.collection("dicts_ru")
+    }
 }
 
-export const updateCurrentTeam = async (keyword, team) => {
-    await COLLECTION.GAME.doc(keyword).set({currentTeam: team}, {merge: true});
+export const updateCurrentTeam = async (keyword, language, team) => {
+    await COLLECTION.GAME[language].doc(keyword).set({currentTeam: team}, {merge: true});
 }
 
-export const updateGameStatus = async (keyword, newData) => {
+export const updateGameStatus = async (keyword, language, newData) => {
     const timestamp = +new Date();
-    await COLLECTION.GAME.doc(keyword).set({timestamp, ...newData}, {merge: true});
+    await COLLECTION.GAME[language].doc(keyword).set({timestamp, ...newData}, {merge: true});
 }
 
-export const fetchGameData = async (keyword, func) => {
+export const fetchGameData = async (keyword, language, func) => {
     //const ONE_HOUR = 1 * 20 * 1000;
     const ONE_HOUR = 60 * 60 * 1000;
 
-    const existingGameRef = await COLLECTION.GAME.doc(keyword);
+    const existingGameRef = await COLLECTION.GAME[language].doc(keyword);
     const snapshot = await existingGameRef.get();
 
     if (snapshot.exists) {
@@ -37,7 +42,7 @@ export const fetchGameData = async (keyword, func) => {
 
 export const fetchDictionaries = async (gameKeyword, language) => {
 
-    const snapshot = await COLLECTION[language].get();
+    const snapshot = await COLLECTION.DICT[language].get();
     const index = selectRandomIndex(gameKeyword, snapshot.docs.length);
     return snapshot.docs.map(doc => doc.data()['words'])[index];
 }

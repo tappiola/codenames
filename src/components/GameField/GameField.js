@@ -9,8 +9,10 @@ import {LanguageContext} from "../../App";
 const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
 
     const TEXTS = useContext(LanguageContext);
+    const {language} = TEXTS;
 
     const [gameConfig, setGameConfig] = useState([]);
+    const [firstTeam, setFirstTeam] = useState(null);
     const [gameData, setGameData] = useState([]);
     const [currentTeam, setCurrentTeam] = useState();
     const [isBlackWordClicked, setIsBlackWordClicked] = useState(false);
@@ -25,21 +27,24 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
     const changeTeam = useCallback(async () => {
         setClicksCurrentRound(0);
         const newTeam = invertColor(currentTeam);
-        await updateCurrentTeam(gameKeyword, newTeam);
-    }, [currentTeam, invertColor, gameKeyword]);
+        await updateCurrentTeam(gameKeyword, language, newTeam);
+    }, [invertColor, currentTeam, gameKeyword, language]);
 
 
     useEffect(() => {
 
         const setupGame = async () => {
-            const [gameSetup, firstTeam] = await generateGame(gameKeyword, TEXTS.language);
+            setIsBlackWordClicked(false);
+            setWinner(null);
+            setClicksCurrentRound(0);
+            const [gameSetup, firstTeam] = await generateGame(gameKeyword, language);
 
             setGameConfig(gameSetup);
             setIsBlackWordClicked(false);
-            setCurrentTeam(firstTeam);
+            setFirstTeam(firstTeam);
         }
         setupGame();
-    }, [gameKeyword]);
+    }, [language, gameKeyword]);
 
     useEffect(() => {
         const gameSetup = gameConfig.map(wordData => ({
@@ -52,14 +57,11 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
 
 
     useEffect(() => {
-        fetchGameData(gameKeyword, querySnapshot => {
+        fetchGameData(gameKeyword, language, querySnapshot => {
             setClickedData(querySnapshot.data()?.words || []);
-            if (querySnapshot.data()?.currentTeam) {
-                setCurrentTeam(querySnapshot.data().currentTeam);
-            }
-
+            setCurrentTeam(querySnapshot.data()?.currentTeam ? querySnapshot.data().currentTeam : firstTeam);
         })
-    }, [gameKeyword]);
+    }, [firstTeam, gameKeyword, language]);
 
     useEffect(() => {
         if (gameData.length > 0) {
@@ -87,14 +89,14 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
                     ...gameData.slice(i + 1)
                 ]
             );
-            await updateGameStatus(gameKeyword, {words: [gameData[i].word, ...clickedData]});
+            await updateGameStatus(gameKeyword, language, {words: [gameData[i].word, ...clickedData]});
             if (gameData[i].color !== currentTeam) {
                 await changeTeam();
             } else {
                 setClicksCurrentRound(clicksCurrentRound + 1);
             }
         }
-    }, [playerRole, clicksCurrentRound, winner, isBlackWordClicked, gameData, gameKeyword,
+    }, [language, playerRole, clicksCurrentRound, winner, isBlackWordClicked, gameData, gameKeyword,
         clickedData, currentTeam, changeTeam]);
 
     const EndRoundButton = () => (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
