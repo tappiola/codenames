@@ -2,8 +2,8 @@ import Chance from "chance";
 import {COLOUR, GAME_CONFIG, TEAM} from '../constants';
 import {fetchDictionaries} from '../firebaseActions';
 
-export const generateGame = async gameKeyword => {
-    const dictionary = await fetchDictionaries(gameKeyword);
+export const generateGame = async (gameKeyword, language) => {
+    const dictionary = await fetchDictionaries(gameKeyword, language);
 
     const chance = new Chance(gameKeyword);
     const colorOptions = chance.shuffle([TEAM.red, TEAM.blue]);

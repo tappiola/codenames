@@ -1,10 +1,13 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import './NewGameModal.css';
 import {ROLE} from '../../constants';
 import {generateRandomWord} from "../../service/wordGenerator";
+import {LanguageContext} from "../../App";
 
 
 export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) => {
+    const TEXTS = useContext(LanguageContext);
+
     const [newGameKeyword, setNewGameKeyword] = useState(generateRandomWord());
 
     const ALWAYS_ALLOWED_KEYS = ["Backspace", "ArrowLeft", "ArrowRight", "Tab"];
@@ -16,21 +19,21 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
             && e.preventDefault()
     }
 
-    const NewGameButton = data => <button
+    const NewGameButton = ({role}) => <button
         className="select-role__button"
         disabled={!newGameKeyword}
-        onClick={() => onGameCreate(newGameKeyword, data.role)}
-    >{data.role}</button>
+        onClick={() => onGameCreate(newGameKeyword, role)}
+    >{TEXTS.ROLE[role]}</button>
 
     return <>
         <div className="backdrop"/>
         <div className="new-game">
             {showCloseButton && <button className="close-modal" onClick={onNewGameCancel}>x</button>}
-            <div className="new-game__label-big">Новая игра</div>
+            <div className="new-game__label-big">{TEXTS.newGame}</div>
             <div>
                 <input
                     className="new-game__input"
-                    placeholder="Ключевое слово"
+                    placeholder={TEXTS.keyword}
                     maxLength="16"
                     onKeyDown={e => restrictInput(e)}
                     onChange={e => setNewGameKeyword(e.target.value.toLowerCase())}
@@ -39,11 +42,11 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
                 <button
                     className="new-game__button"
                     onClick={() => setNewGameKeyword(generateRandomWord())}
-                >Сгенерировать другой ключ
+                >{TEXTS.changeKey}
                 </button>
             </div>
             <div>
-                <div className="new-game__label">Открыть игру как:</div>
+                <div className="new-game__label">{TEXTS.toGame}</div>
                 <div>
                     <NewGameButton role={ROLE.captain}/>
                     <NewGameButton role={ROLE.player}/>

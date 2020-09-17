@@ -17,6 +17,7 @@
 
 .new-game__input {
     text-transform: uppercase;
+    text-align: center;
     font-size: 20px;
     font-weight: bold;
     height: 3rem;

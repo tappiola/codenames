@@ -4,18 +4,23 @@ import GameField from './components/GameField/GameField';
 import {NewGameModal} from "./components/NewGameModal/NewGameModal";
 import './App.css';
 import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
+import {LANGUAGES, TEXTS} from "./constants";
+
+export const LanguageContext = React.createContext();
 
 function App() {
     const history = useHistory();
+    const {location: {pathname}} = history;
     const [newGameSelectionMode, setNewGameSelectionMode] = useState(false);
     const [gameKeyword, setGameKeyword] = useState('');
     const [playerRole, setPlayerRole] = useState(null);
+    const [localizedTexts, setLocalizedTexts] = useState(TEXTS[LANGUAGES.RU]);
 
     useEffect(() => {
-        const keyword = history.location.pathname.slice(1).toLowerCase();
+        const keyword = pathname.slice(1).toLowerCase();
         setGameKeyword(keyword);
         setNewGameSelectionMode(keyword.length === 0);
-    }, [history.location])
+    }, [pathname])
 
     const gameCreateHandler = (keyword, role) => {
         history.push('/' + keyword);
@@ -24,7 +29,7 @@ function App() {
         setNewGameSelectionMode(false);
     }
 
-    return <>
+    return <LanguageContext.Provider value={localizedTexts}>
         {newGameSelectionMode && <NewGameModal
             onGameCreate={gameCreateHandler}
             onNewGameCancel={() => setNewGameSelectionMode(false)}
@@ -38,7 +43,7 @@ function App() {
                 onNewGameStart={() => setNewGameSelectionMode(true)}
             />)
         }
-    </>
+    </LanguageContext.Provider>
 }
 
 export default App;

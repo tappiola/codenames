@@ -1,22 +1,14 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import clsx from 'clsx';
 import './GameField.css';
 import {fetchGameData, updateCurrentTeam, updateGameStatus} from "../../firebaseActions";
 import {COLOUR, ROLE, TEAM} from '../../constants';
 import {generateGame} from "../../service/wordGenerator";
+import {LanguageContext} from "../../App";
 
 const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
 
-    const MESSAGES = {
-        YOUR_TURN: {
-            [TEAM.red]: "Ход команды красных",
-            [TEAM.blue]: "Ход команды синих"
-        },
-        WINNER: {
-            [TEAM.red]: "Выиграла команда красных",
-            [TEAM.blue]: "Выиграла команда синих"
-        }
-    }
+    const TEXTS = useContext(LanguageContext);
 
     const [gameConfig, setGameConfig] = useState([]);
     const [gameData, setGameData] = useState([]);
@@ -40,7 +32,7 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
     useEffect(() => {
 
         const setupGame = async () => {
-            const [gameSetup, firstTeam] = await generateGame(gameKeyword);
+            const [gameSetup, firstTeam] = await generateGame(gameKeyword, TEXTS.language);
 
             setGameConfig(gameSetup);
             setIsBlackWordClicked(false);
@@ -106,9 +98,9 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
         clickedData, currentTeam, changeTeam]);
 
     const EndRoundButton = () => (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
-        <button className="top-banner__button" onClick={() => changeTeam()}>Закончить ход</button>
+        <button className="top-banner__button" onClick={() => changeTeam()}>{TEXTS.endTurn}</button>
 
-    const NewGameButton = () => <button className="top-banner__button" onClick={onNewGameStart}>Новая игра</button>
+    const NewGameButton = () => <button className="top-banner__button" onClick={onNewGameStart}>{TEXTS.newGame}</button>
 
     const TopBanner = () => {
         return (
@@ -116,8 +108,8 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
                 <div className="top-banner__container">
                     <span className="top-banner__status">
                 {isBlackWordClicked
-                    ? "Команда, нажавшая черное слово, проиграла"
-                    : winner ? MESSAGES.WINNER[currentTeam] : MESSAGES.YOUR_TURN[currentTeam]
+                    ? TEXTS.blackWordClicked
+                    : winner ? TEXTS.WINNER[currentTeam] : TEXTS.YOUR_TURN[currentTeam]
                 }
                 </span>
                     <EndRoundButton/>
@@ -150,7 +142,7 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
         </div>
         <div className="bottom-banner">
             <WordsCounter colour={TEAM.red}/>
-            <div className={"words-remaining"}>Слов осталось</div>
+            <div className={"words-remaining"}>{TEXTS.wordsRemaining}</div>
             <WordsCounter colour={TEAM.blue}/>
         </div>
     </div>

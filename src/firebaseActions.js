@@ -1,10 +1,11 @@
 import {db} from './firebase';
 import {selectRandomIndex} from "./service/wordGenerator";
+import {LANGUAGES} from "./constants";
 
 export const COLLECTION = {
     GAME: db.collection("game"),
-    DICTS_EN: db.collection("dicts_en"),
-    DICTS_RU: db.collection("dicts_ru")
+    [LANGUAGES.EN]: db.collection("dicts_en"),
+    [LANGUAGES.RU]: db.collection("dicts_ru")
 }
 
 export const updateCurrentTeam = async (keyword, team) => {
@@ -34,9 +35,9 @@ export const fetchGameData = async (keyword, func) => {
     existingGameRef.onSnapshot(querySnapshot => func(querySnapshot));
 }
 
-export const fetchDictionaries = async gameKeyword => {
+export const fetchDictionaries = async (gameKeyword, language) => {
 
-    const snapshot = await COLLECTION.DICTS_RU.get();
+    const snapshot = await COLLECTION[language].get();
     const index = selectRandomIndex(gameKeyword, snapshot.docs.length);
     return snapshot.docs.map(doc => doc.data()['words'])[index];
 }
