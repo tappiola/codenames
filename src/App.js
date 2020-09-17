@@ -4,7 +4,7 @@ import GameField from './components/GameField/GameField';
 import {NewGameModal} from "./components/NewGameModal/NewGameModal";
 import './App.css';
 import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
-import {LANGUAGES, TEXTS} from "./constants";
+import {LANGUAGES, TEXTS, LOCAL_STORAGE_KEY} from "./constants";
 import {LanguageSelector} from "./components/LanguageSelector/LanguageSelector";
 
 export const LanguageContext = React.createContext();
@@ -15,7 +15,9 @@ function App() {
     const [newGameSelectionMode, setNewGameSelectionMode] = useState(false);
     const [gameKeyword, setGameKeyword] = useState('');
     const [playerRole, setPlayerRole] = useState(null);
-    const [localizedTexts, setLocalizedTexts] = useState(TEXTS[LANGUAGES.RU]);
+    const [localizedTexts, setLocalizedTexts] = useState(
+        TEXTS[localStorage.getItem(LOCAL_STORAGE_KEY) || LANGUAGES.RU]
+    );
 
     useEffect(() => {
         const keyword = pathname.slice(1).toLowerCase();
@@ -32,6 +34,7 @@ function App() {
 
     const setLanguage = language => {
         setLocalizedTexts(TEXTS[language]);
+        localStorage.setItem(LOCAL_STORAGE_KEY, language);
     }
 
     return <LanguageContext.Provider value={localizedTexts}>

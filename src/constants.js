@@ -1,3 +1,4 @@
+export const LOCAL_STORAGE_KEY = 'codenames_language';
 export const GAME_CONFIG = {
     fieldSize: 25,
     whiteWordsCount: 7
