@@ -1,4 +1,4 @@
-import {COLLECTION} from '../src/firebaseActions.js';
+import {COLLECTION} from '../../src/firebaseActions.js';
 import fs from 'fs';
 
 const locales = ['en', 'ru'];

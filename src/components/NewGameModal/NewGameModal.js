@@ -1,14 +1,30 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import './NewGameModal.css';
 import {ROLE} from '../../constants';
-import {generateRandomWord} from "../../service/wordGenerator";
 import {LanguageContext} from "../../App";
+import {fetchKeywords} from "../../firebaseActions";
+import {generateKeyword} from "../../service/wordGenerator";
 
 
 export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) => {
     const TEXTS = useContext(LanguageContext);
+    const {language} = TEXTS;
 
-    const [newGameKeyword, setNewGameKeyword] = useState(generateRandomWord());
+    const [keywords, setKeywords] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        fetchKeywords(language).then(words => {
+            setKeywords(words);
+            setIsLoading(false);
+        })
+    }, [language])
+
+    useEffect(() => {
+        keywords.length > 0 && setNewGameKeyword(generateKeyword(keywords));
+    }, [keywords])
+
+    const [newGameKeyword, setNewGameKeyword] = useState('');
 
     const ALWAYS_ALLOWED_KEYS = ["Backspace", "ArrowLeft", "ArrowRight", "Tab"];
     const restrictInput = e => {
@@ -24,6 +40,10 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
         disabled={!newGameKeyword}
         onClick={() => onGameCreate(newGameKeyword, role)}
     >{TEXTS.ROLE[role]}</button>
+
+    if (isLoading) {
+        return null
+    }
 
     return <>
         <div className="backdrop"/>
@@ -41,7 +61,7 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
                 />
                 <button
                     className="new-game__button"
-                    onClick={() => setNewGameKeyword(generateRandomWord())}
+                    onClick={() => setNewGameKeyword(generateKeyword(keywords))}
                 >{TEXTS.changeKey}
                 </button>
             </div>
@@ -55,4 +75,3 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
         </div>
     </>
 }
-

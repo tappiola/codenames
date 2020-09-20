@@ -4,7 +4,7 @@ import GameField from './components/GameField/GameField';
 import {NewGameModal} from "./components/NewGameModal/NewGameModal";
 import './App.css';
 import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
-import {LANGUAGES, TEXTS, LOCAL_STORAGE_KEY} from "./constants";
+import {LANGUAGES, LOCAL_STORAGE_KEY, TEXTS} from "./constants";
 import {LanguageSelector} from "./components/LanguageSelector/LanguageSelector";
 
 export const LanguageContext = React.createContext();

@@ -10,7 +10,11 @@ export const COLLECTION = {
     DICT: {
         [LANGUAGES.EN]: db.collection("dicts_en"),
         [LANGUAGES.RU]: db.collection("dicts_ru")
-    }
+    },
+    KEYWORD: {
+        [LANGUAGES.EN]: db.collection("keywords_en"),
+        [LANGUAGES.RU]: db.collection("keywords_ru")
+    },
 }
 
 export const updateCurrentTeam = async (keyword, language, team) => {
@@ -45,4 +49,9 @@ export const fetchDictionaries = async (gameKeyword, language) => {
     const snapshot = await COLLECTION.DICT[language].get();
     const index = selectRandomIndex(gameKeyword, snapshot.docs.length);
     return snapshot.docs.map(doc => doc.data()['words'])[index];
+}
+
+export const fetchKeywords = async language => {
+    const snapshot = await COLLECTION.KEYWORD[language].doc('keywords').get();
+    return snapshot.data()['words'];
 }

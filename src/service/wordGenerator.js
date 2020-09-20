@@ -19,11 +19,13 @@ export const generateGame = async (gameKeyword, language) => {
     return [gameData, colorOptions[0]];
 }
 
-export const generateRandomWord = () => {
-    return Math.random().toString(36).substr(2, 8);
-}
-
 export const selectRandomIndex = (gameKeyword, maxIndex) => {
     const chance = new Chance(gameKeyword);
     return chance.integer({min: 0, max: maxIndex});
+}
+
+export const generateKeyword = words => {
+    const index = Math.floor(Math.random() * words.length);
+    console.log(index)
+    return words[index];
 }
