@@ -22,7 +22,7 @@ export const FullscreenButton = () => {
 
     return <i
         className={`fas ${fullscreen ? 'fa-compress-arrows-alt' : 'fa-expand-arrows-alt'} fa-2x`}
-        style={{color: "whitesmoke"}}
+        style={{color: "whitesmoke", cursor: "pointer"}}
         onClick={toggleFullscreen}
     />
 }
