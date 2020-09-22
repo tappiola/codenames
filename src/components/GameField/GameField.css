@@ -15,12 +15,8 @@
 @media screen and (orientation: portrait) {
     .game-field {
         grid-template-rows: 10% auto 10%;
-        transform: rotate(90deg);
-        transform-origin: top left;
         height: 100vw;
         width: 100vh;
-        position: absolute;
-        left: 100vw;
     }
 }
 

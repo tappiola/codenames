@@ -22,7 +22,3 @@ export function docToObject(doc) {
         ...doc.data(),
     };
 }
-
-export function collectionToObject(collection) {
-    return collection.docs.map(docToObject);
-}
