@@ -1,7 +1,6 @@
 .game-field {
     display: grid;
     height: 100%;
-    width: 100vw;
     grid-template-rows: 2.5rem auto 10%;
 }
 
@@ -11,12 +10,9 @@
     }
 }
 
-/*Adjust field size for portrait orientation */
 @media screen and (orientation: portrait) {
     .game-field {
         grid-template-rows: 10% auto 10%;
-        height: 100vw;
-        width: 100vh;
     }
 }
 
