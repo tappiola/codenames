@@ -17,3 +17,26 @@ body, html {
     z-index: 1;
     position: absolute;
 }
+
+/* Support screen orientation change */
+@media screen and (orientation: portrait) {
+    body {
+        transform: rotate(90deg);
+        transform-origin: top left;
+        position: absolute;
+        left: 100vw;
+    }
+}
+
+.top-banner-sheer {
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    right: 0;
+    width: 100%;
+    height: 3rem;
+    padding-right: 1rem;
+    align-items: center;
+}

@@ -5,8 +5,10 @@ import {fetchGameData, updateCurrentTeam, updateGameStatus} from "../../firebase
 import {COLOUR, ROLE, TEAM} from '../../constants';
 import {generateGame} from "../../service/wordGenerator";
 import {LanguageContext} from "../../App";
+import {FullscreenButton} from "../Fullscreen/FullscreenButton";
+import {LanguageSelector} from "../LanguageSelector/LanguageSelector";
 
-const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
+const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage}) => {
 
     const TEXTS = useContext(LanguageContext);
     const {language} = TEXTS;
@@ -116,7 +118,11 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart}) => {
                 </span>
                     <EndRoundButton/>
                 </div>
-                <NewGameButton/>
+                <div className="top-banner__container">
+                    <NewGameButton/>
+                    <LanguageSelector className="language-selector-banner" onSetLanguage={onSetLanguage}/>
+                    <FullscreenButton/>
+                </div>
             </div>
         )
     }

@@ -6,6 +6,7 @@ import './App.css';
 import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
 import {LANGUAGES, LOCAL_STORAGE_KEY, TEXTS} from "./constants";
 import {LanguageSelector} from "./components/LanguageSelector/LanguageSelector";
+import {FullscreenButton} from "./components/Fullscreen/FullscreenButton";
 
 export const LanguageContext = React.createContext();
 
@@ -37,8 +38,17 @@ function App() {
         localStorage.setItem(LOCAL_STORAGE_KEY, language);
     }
 
+    const BasicButtons = () => {
+        return <div className="top-banner-sheer">
+            {/*<div className="top-banner__container">*/}
+            <LanguageSelector className="language-selector-banner" onSetLanguage={setLanguage}/>
+            <FullscreenButton/>
+            {/*</div>*/}
+        </div>
+    }
+
     return <LanguageContext.Provider value={localizedTexts}>
-        <LanguageSelector onSetLanguage={setLanguage}/>
+        {(!gameKeyword || !playerRole) && <BasicButtons/>}
         {newGameSelectionMode && <NewGameModal
             onGameCreate={gameCreateHandler}
             onNewGameCancel={() => setNewGameSelectionMode(false)}
@@ -50,6 +60,7 @@ function App() {
                 gameKeyword={gameKeyword}
                 playerRole={playerRole}
                 onNewGameStart={() => setNewGameSelectionMode(true)}
+                onSetLanguage={setLanguage}
             />)
         }
     </LanguageContext.Provider>

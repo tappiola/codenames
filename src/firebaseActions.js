@@ -47,7 +47,7 @@ export const fetchGameData = async (keyword, language, func) => {
 export const fetchDictionaries = async (gameKeyword, language) => {
 
     const snapshot = await COLLECTION.DICT[language].get();
-    const index = selectRandomIndex(gameKeyword, snapshot.docs.length);
+    const index = selectRandomIndex(gameKeyword, snapshot.docs.length - 1);
     return snapshot.docs.map(doc => doc.data()['words'])[index];
 }
 
