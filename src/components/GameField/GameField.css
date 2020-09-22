@@ -1,7 +1,20 @@
 .game-field {
     display: grid;
     height: 100%;
+    width: 100vw;
     grid-template-rows: 2.5rem auto 10%;
+}
+
+/* Support screen orientation change */
+@media screen and (orientation: portrait) {
+    .game-field {
+        transform: rotate(90deg);
+        transform-origin: top left;
+        position: absolute;
+        left: 100vw;
+        height: 100vw;
+        width: 100vh;
+    }
 }
 
 @media only screen and (min-height: 500px) {
