@@ -7,6 +7,8 @@ import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
 import {LANGUAGES, LOCAL_STORAGE_KEY, TEXTS} from "./constants";
 import {LanguageSelector} from "./components/LanguageSelector/LanguageSelector";
 import {FullscreenButton} from "./components/Fullscreen/FullscreenButton";
+import {RulesPopup} from "./components/Rules/RulesPopup";
+import {RulesButton} from "./components/Rules/RulesButton";
 
 export const LanguageContext = React.createContext();
 
@@ -14,6 +16,7 @@ function App() {
     const history = useHistory();
     const {location: {pathname}} = history;
     const [newGameSelectionMode, setNewGameSelectionMode] = useState(false);
+    const [rulesDisplayed, setRulesDisplayed] = useState(false);
     const [gameKeyword, setGameKeyword] = useState('');
     const [playerRole, setPlayerRole] = useState(null);
     const [localizedTexts, setLocalizedTexts] = useState(
@@ -40,14 +43,14 @@ function App() {
 
     const BasicButtons = () => {
         return <div className="top-banner-sheer">
-            {/*<div className="top-banner__container">*/}
+            <RulesButton onRulesClick={() => setRulesDisplayed(true)}/>
             <LanguageSelector className="language-selector-banner" onSetLanguage={setLanguage}/>
             <FullscreenButton/>
-            {/*</div>*/}
         </div>
     }
 
     return <LanguageContext.Provider value={localizedTexts}>
+        {rulesDisplayed && <RulesPopup onClose={() => setRulesDisplayed(false)}/>}
         {(!gameKeyword || !playerRole) && <BasicButtons/>}
         {newGameSelectionMode && <NewGameModal
             onGameCreate={gameCreateHandler}
@@ -61,6 +64,7 @@ function App() {
                 playerRole={playerRole}
                 onNewGameStart={() => setNewGameSelectionMode(true)}
                 onSetLanguage={setLanguage}
+                onRulesClick={() => setRulesDisplayed(true)}
             />)
         }
     </LanguageContext.Provider>

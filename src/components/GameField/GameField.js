@@ -7,8 +7,9 @@ import {generateGame} from "../../service/wordGenerator";
 import {LanguageContext} from "../../App";
 import {FullscreenButton} from "../Fullscreen/FullscreenButton";
 import {LanguageSelector} from "../LanguageSelector/LanguageSelector";
+import {RulesButton} from "../Rules/RulesButton";
 
-const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage}) => {
+const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage, onRulesClick}) => {
 
     const TEXTS = useContext(LanguageContext);
     const {language} = TEXTS;
@@ -120,6 +121,7 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage}) => 
                 </div>
                 <div className="top-banner__container">
                     <NewGameButton/>
+                    <RulesButton onRulesClick={onRulesClick}/>
                     <LanguageSelector className="language-selector-banner" onSetLanguage={onSetLanguage}/>
                     <FullscreenButton/>
                 </div>
