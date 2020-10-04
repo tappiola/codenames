@@ -96,6 +96,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 3rem;
     width: 100%;
     color: white;
     padding: 0 1rem 0 2rem;
@@ -106,15 +107,19 @@
 .top-banner__container {
     height: 100%;
     display: flex;
+    padding: 7px 0px;
     align-items: center;
 }
 
 .top-banner__button {
-    height: 70%;
+    height: 100%;
     font-size: 16px;
     border: 1px solid rgb(239, 239, 239);
     border-radius: 2px;
+    background-color: rgb(239, 239, 239);
+    cursor: pointer;
     margin-left: 10px;
+    white-space: nowrap;
 }
 
 .top-banner__status {

@@ -121,8 +121,8 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage, onRu
                 </div>
                 <div className="top-banner__container">
                     <NewGameButton/>
-                    <RulesButton onRulesClick={onRulesClick}/>
                     <LanguageSelector className="language-selector-banner" onSetLanguage={onSetLanguage}/>
+                    <RulesButton onRulesClick={onRulesClick}/>
                     <FullscreenButton/>
                 </div>
             </div>

@@ -5,6 +5,8 @@
     transform: translate(-50%, -50%);
     z-index: 2;
     height: 80%;
+    max-width: 400px;
+    max-height: 350px;
     border: 1px solid gray;
     display: flex;
     flex-direction: column;
@@ -22,6 +24,13 @@
     }
 }
 
+@media (max-height: 500px) {
+    .new-game {
+        padding-top: 15px;
+        top: 55%;
+    }
+}
+
 .new-game__input {
     text-transform: uppercase;
     text-align: center;
@@ -36,7 +45,7 @@
 .new-game__label {
     text-align: center;
     padding-top: 5px;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
 }
 
 .new-game__label-big {
@@ -44,6 +53,10 @@
     font-size: 1.3rem;
     text-transform: uppercase;
     padding-bottom: 5px;
+}
+
+.new-game-role-buttons {
+    width: 100%;
 }
 
 .new-game__button {

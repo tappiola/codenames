@@ -1,8 +1,17 @@
-import React, {useContext} from "react";
-import {LanguageContext} from "../../App";
+import React from "react";
 
 
 export const RulesButton = ({onRulesClick}) => {
-    const TEXTS = useContext(LanguageContext);
-    return <button onClick={onRulesClick} className="top-banner__button">{TEXTS.rules}</button>
+    return (
+        <span
+            onClick={onRulesClick}
+            style={{
+                color: 'white',
+                fontSize: '32px',
+                cursor: 'pointer',
+                paddingRight: '10px'
+            }}>
+            <i className="far fa-question-circle"/>
+        </span>
+    )
 }

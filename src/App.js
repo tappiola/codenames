@@ -43,8 +43,8 @@ function App() {
 
     const BasicButtons = () => {
         return <div className="top-banner-sheer">
-            <RulesButton onRulesClick={() => setRulesDisplayed(true)}/>
             <LanguageSelector className="language-selector-banner" onSetLanguage={setLanguage}/>
+            <RulesButton onRulesClick={() => setRulesDisplayed(true)}/>
             <FullscreenButton/>
         </div>
     }

@@ -65,7 +65,7 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
                 >{TEXTS.changeKey}
                 </button>
             </div>
-            <div>
+            <div className='new-game-role-buttons'>
                 <div className="new-game__label">{TEXTS.toGame}</div>
                 <div>
                     <NewGameButton role={ROLE.captain}/>
