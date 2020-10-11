@@ -1,4 +1,4 @@
-.game-field {
+.gameField {
     display: grid;
     height: 100%;
     width: 100vw;
@@ -7,7 +7,7 @@
 
 /* Support screen orientation change */
 @media screen and (orientation: portrait) {
-    .game-field {
+    .gameField {
         transform: rotate(90deg);
         transform-origin: top left;
         position: absolute;
@@ -18,13 +18,13 @@
 }
 
 @media only screen and (min-height: 500px) {
-    .game-field {
+    .gameField {
         grid-template-rows: 3rem auto 10%;
     }
 }
 
 @media screen and (orientation: portrait) {
-    .game-field {
+    .gameField {
         grid-template-rows: 10% auto 10%;
     }
 }
@@ -50,13 +50,6 @@
     cursor: pointer;
     font-size: 1.5rem;
 }
-
-/*.opened {*/
-/*    transition: transform 2s;*/
-/*    transform: rotateX(180deg);*/
-/*    transform-style: preserve-3d;*/
-/*    perspective: 1000px;*/
-/*}*/
 
 /* Reduce font size for smaller screens */
 @media only screen and (orientation: landscape) and (max-height: 500px) {
@@ -92,7 +85,7 @@
     color: #a5a5a5;
 }
 
-.top-banner {
+.topBanner {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -104,14 +97,14 @@
     font-size: 1rem;
 }
 
-.top-banner__container {
+.topBannerContainer {
     height: 100%;
     display: flex;
     padding: 7px 0px;
     align-items: center;
 }
 
-.top-banner__button {
+.topBannerButton {
     height: 100%;
     font-size: 16px;
     border: 1px solid rgb(239, 239, 239);
@@ -122,16 +115,16 @@
     white-space: nowrap;
 }
 
-.top-banner__status {
+.topBannerStatus {
     margin-right: 10px;
 }
 
-.bottom-banner {
+.bottomBanner {
     display: grid;
     grid-template-columns: 35% auto 35%;
 }
 
-.words-counter {
+.wordsCounter {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -140,7 +133,7 @@
     font-size: 1.5rem;
 }
 
-.words-remaining {
+.wordsRemaining {
     display: flex;
     justify-content: center;
     align-items: center;

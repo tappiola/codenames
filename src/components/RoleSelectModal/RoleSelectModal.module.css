@@ -1,4 +1,4 @@
-.select-role {
+.selectRole {
     position: absolute;
     width: 350px;
     top: 45%;
@@ -9,7 +9,7 @@
     padding: 30px;
 }
 
-.select-role__button {
+.selectRoleButton:global {
     font-size: 16px;
     height: 2.5rem;
     width: 50%;
@@ -18,8 +18,12 @@
     cursor: pointer;
 }
 
-.select-role__label {
+.label {
     font-size: 1.5rem;
     text-align: center;
     padding-bottom: 10px;
+}
+
+.backdrop {
+  composes: backdrop from '../../App.css';
 }

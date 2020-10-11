@@ -20,13 +20,21 @@
 }
 
 
-.rules__text {
+.rulesText {
     overflow-y: auto;
     padding: 0 10px;
 }
 
-.rules__title {
+.rulesTitle {
     text-transform: uppercase;
+}
+
+.backdrop {
+  composes: backdrop from '../../App.css';
+}
+
+.closeModal {
+  composes: closeModal from '../../App.css';
 }
 
 @media (min-width: 768px){

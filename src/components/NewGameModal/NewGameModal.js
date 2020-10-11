@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import './NewGameModal.css';
+import classes from './NewGameModal.module.css';
 import {ROLE} from '../../constants';
 import {LanguageContext} from "../../App";
 import {fetchKeywords} from "../../firebaseActions";
@@ -36,7 +36,7 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
     }
 
     const NewGameButton = ({role}) => <button
-        className="select-role__button"
+        className={classes.selectRoleButton}
         disabled={!newGameKeyword}
         onClick={() => onGameCreate(newGameKeyword, role)}
     >{TEXTS.ROLE[role]}</button>
@@ -46,13 +46,13 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
     }
 
     return <>
-        <div className="backdrop"/>
-        <div className="new-game">
-            {showCloseButton && <button className="close-modal" onClick={onNewGameCancel}>x</button>}
-            <div className="new-game__label-big">{TEXTS.newGame}</div>
+        <div className={classes.backdrop}/>
+        <div className={classes.newGame}>
+            {showCloseButton && <button className={classes.closeModal} onClick={onNewGameCancel}>x</button>}
+            <div className={classes.labelBig}>{TEXTS.newGame}</div>
             <div>
                 <input
-                    className="new-game__input"
+                    className={classes.input}
                     placeholder={TEXTS.keyword}
                     maxLength="16"
                     onKeyDown={e => restrictInput(e)}
@@ -60,13 +60,13 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
                     value={newGameKeyword}
                 />
                 <button
-                    className="new-game__button"
+                    className={classes.newGameButton}
                     onClick={() => setNewGameKeyword(generateKeyword(keywords))}
                 >{TEXTS.changeKey}
                 </button>
             </div>
-            <div className='new-game-role-buttons'>
-                <div className="new-game__label">{TEXTS.toGame}</div>
+            <div className={classes.roleButtons}>
+                <div className={classes.label}>{TEXTS.toGame}</div>
                 <div>
                     <NewGameButton role={ROLE.captain}/>
                     <NewGameButton role={ROLE.player}/>

@@ -1,4 +1,4 @@
-.new-game {
+.newGame {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -18,20 +18,20 @@
 
 /* Support screen orientation change */
 @media screen and (orientation: portrait) {
-    .new-game {
+    .newGame {
         width: 90%;
         height: 50%;
     }
 }
 
 @media (max-height: 500px) {
-    .new-game {
+    .newGame {
         padding-top: 15px;
         top: 55%;
     }
 }
 
-.new-game__input {
+.input {
     text-transform: uppercase;
     text-align: center;
     font-size: 20px;
@@ -42,34 +42,38 @@
     padding: 0 10px;
 }
 
-.new-game__label {
+.label {
     text-align: center;
     padding-top: 5px;
     padding-bottom: 10px;
 }
 
-.new-game__label-big {
+.labelBig {
     text-align: center;
     font-size: 1.3rem;
     text-transform: uppercase;
     padding-bottom: 5px;
 }
 
-.new-game-role-buttons {
+.roleButtons {
     width: 100%;
 }
+.selectRoleButton {
+    composes: selectRoleButton from '../RoleSelectModal/RoleSelectModal.module.css';
+}
 
-.new-game__button {
+.backdrop {
+  composes: backdrop from '../../App.css';
+}
+
+.closeModal {
+  composes: closeModal from '../../App.css';
+}
+
+.newGameButton {
     height: 2rem;
     width: 100%;
     font-size: 1rem;
     margin-top: 15px;
-    cursor: pointer;
-}
-
-.close-modal {
-    position: absolute;
-    top: 12px;
-    right: 12px;
     cursor: pointer;
 }

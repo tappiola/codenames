@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import clsx from 'clsx';
-import './GameField.css';
+import classes from './GameField.module.css';
 import {fetchGameData, updateCurrentTeam, updateGameStatus} from "../../firebaseActions";
 import {COLOUR, ROLE, TEAM} from '../../constants';
 import {generateGame} from "../../service/wordGenerator";
@@ -103,15 +103,15 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage, onRu
         clickedData, currentTeam, changeTeam]);
 
     const EndRoundButton = () => (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
-        <button className="top-banner__button" onClick={() => changeTeam()}>{TEXTS.endTurn}</button>
+        <button className={classes.topBannerButton} onClick={() => changeTeam()}>{TEXTS.endTurn}</button>
 
-    const NewGameButton = () => <button className="top-banner__button" onClick={onNewGameStart}>{TEXTS.newGame}</button>
+    const NewGameButton = () => <button className={classes.topBannerButton} onClick={onNewGameStart}>{TEXTS.newGame}</button>
 
     const TopBanner = () => {
         return (
-            <div className={clsx("top-banner", isBlackWordClicked ? 'black' : currentTeam)}>
-                <div className="top-banner__container">
-                    <span className="top-banner__status">
+            <div className={clsx(classes.topBanner, isBlackWordClicked ? classes.black : classes[currentTeam])}>
+                <div className={classes.topBannerContainer}>
+                    <span className={classes.topBannerStatus}>
                 {isBlackWordClicked
                     ? TEXTS.blackWordClicked
                     : winner ? TEXTS.WINNER[currentTeam] : TEXTS.YOUR_TURN[currentTeam]
@@ -119,9 +119,9 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage, onRu
                 </span>
                     <EndRoundButton/>
                 </div>
-                <div className="top-banner__container">
+                <div className={classes.topBannerContainer}>
                     <NewGameButton/>
-                    <LanguageSelector className="language-selector-banner" onSetLanguage={onSetLanguage}/>
+                    <LanguageSelector onSetLanguage={onSetLanguage}/>
                     <RulesButton onRulesClick={onRulesClick}/>
                     <FullscreenButton/>
                 </div>
@@ -129,18 +129,17 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage, onRu
         )
     }
 
-    const WordsCounter = ({colour}) => <div className={"words-counter " + colour}>{getWordsCount(colour)}</div>
+    const WordsCounter = ({colour}) => <div className={`${classes.wordsCounter} ${classes[colour]}`}>{getWordsCount(colour)}</div>
 
-    const getClassNames = wordData => clsx("word", {
-        [wordData.color]: (playerRole === ROLE.captain && wordData.color !== COLOUR.white) || wordData.clicked,
-        'transparent': playerRole === ROLE.captain && wordData.clicked && wordData.color !== COLOUR.white,
-        'opened': wordData.clicked
+    const getClassNames = wordData => clsx(classes.word, {
+        [classes[wordData.color]]: (playerRole === ROLE.captain && wordData.color !== COLOUR.white) || wordData.clicked,
+        [classes.transparent]: playerRole === ROLE.captain && wordData.clicked && wordData.color !== COLOUR.white
     });
 
 
-    return <div className="game-field">
+    return <div className={classes.gameField}>
         <TopBanner/>
-        <div className="field">
+        <div className={classes.field}>
             {gameData.map((i, index) => <div
                 id={index}
                 key={i.word}
@@ -150,9 +149,9 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage, onRu
                 {i.word}
             </div>)}
         </div>
-        <div className="bottom-banner">
+        <div className={classes.bottomBanner}>
             <WordsCounter colour={TEAM.red}/>
-            <div className={"words-remaining"}>{TEXTS.wordsRemaining}</div>
+            <div className={classes.wordsRemaining}>{TEXTS.wordsRemaining}</div>
             <WordsCounter colour={TEAM.blue}/>
         </div>
     </div>

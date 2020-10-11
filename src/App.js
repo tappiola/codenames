@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import GameField from './components/GameField/GameField';
 import {NewGameModal} from "./components/NewGameModal/NewGameModal";
-import './App.css';
+import classes from './App.css';
 import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
 import {LANGUAGES, LOCAL_STORAGE_KEY, TEXTS} from "./constants";
 import {LanguageSelector} from "./components/LanguageSelector/LanguageSelector";
@@ -43,7 +43,7 @@ function App() {
 
     const BasicButtons = () => {
         return <div className="top-banner-sheer">
-            <LanguageSelector className="language-selector-banner" onSetLanguage={setLanguage}/>
+            <LanguageSelector onSetLanguage={setLanguage}/>
             <RulesButton onRulesClick={() => setRulesDisplayed(true)}/>
             <FullscreenButton/>
         </div>

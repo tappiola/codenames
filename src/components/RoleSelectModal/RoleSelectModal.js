@@ -1,6 +1,6 @@
 import {ROLE} from "../../constants";
 import React, {useContext} from "react";
-import './RoleSelectModal.css';
+import classes from './RoleSelectModal.module.css';
 import {LanguageContext} from '../../App';
 
 export const RoleSelect = ({onRoleSelect}) => {
@@ -8,12 +8,12 @@ export const RoleSelect = ({onRoleSelect}) => {
     const TEXTS = useContext(LanguageContext);
 
     return <>
-        <div className="backdrop"/>
-        <div className="select-role">
-            <div className="new-game__label">{TEXTS.toGame}</div>
-            <button className="select-role__button"
+        <div className={classes.backdrop}/>
+        <div className={classes.selectRole}>
+            <div className={classes.label}>{TEXTS.toGame}</div>
+            <button className={classes.selectRoleButton}
                     onClick={() => onRoleSelect(ROLE.captain)}>{TEXTS.ROLE.captain}</button>
-            <button className="select-role__button"
+            <button className={classes.selectRoleButton}
                     onClick={() => onRoleSelect(ROLE.player)}>{TEXTS.ROLE.player}</button>
         </div>
     </>

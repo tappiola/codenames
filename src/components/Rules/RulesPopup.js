@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import "./RulesPopup.css";
+import classes from "./RulesPopup.module.css";
 import {RULES_EN, RULES_RU} from './RulesTexts';
 import {LANGUAGES} from "../../constants";
 import {LanguageContext} from "../../App";
@@ -15,11 +15,11 @@ export const RulesPopup = ({onClose}) => {
     const RulesText = RULES_TEXT[language];
 
     return <>
-        <div className="backdrop"/>
-        <div className="rules">
-            <button className="close-modal" onClick={onClose}>x</button>
-            <h2 className="rules__title">{TEXTS.rules}</h2>
-            <div className="rules__text">
+        <div className={classes.backdrop}/>
+        <div className={classes.rules}>
+            <button className={classes.closeModal} onClick={onClose}>x</button>
+            <h2 className={classes.rulesTitle}>{TEXTS.rules}</h2>
+            <div className={classes.rulesText}>
                 <RulesText/>
             </div>
         </div>
