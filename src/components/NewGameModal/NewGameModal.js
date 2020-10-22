@@ -5,6 +5,11 @@ import {LanguageContext} from "../../App";
 import {fetchKeywords} from "../../firebaseActions";
 import {generateKeyword} from "../../service/wordGenerator";
 
+const NewGameButton = ({role, newGameKeyword, onGameCreate, texts}) => <button
+    className={classes.selectRoleButton}
+    disabled={!newGameKeyword}
+    onClick={() => onGameCreate(newGameKeyword, role)}
+>{texts[role]}</button>
 
 export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) => {
     const TEXTS = useContext(LanguageContext);
@@ -35,12 +40,6 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
             && e.preventDefault()
     }
 
-    const NewGameButton = ({role}) => <button
-        className={classes.selectRoleButton}
-        disabled={!newGameKeyword}
-        onClick={() => onGameCreate(newGameKeyword, role)}
-    >{TEXTS.ROLE[role]}</button>
-
     if (isLoading) {
         return null
     }
@@ -68,8 +67,18 @@ export const NewGameModal = ({onGameCreate, onNewGameCancel, showCloseButton}) =
             <div className={classes.roleButtons}>
                 <div className={classes.label}>{TEXTS.toGame}</div>
                 <div>
-                    <NewGameButton role={ROLE.captain}/>
-                    <NewGameButton role={ROLE.player}/>
+                    <NewGameButton
+                        role={ROLE.captain}
+                        newGameKeyword={newGameKeyword}
+                        onGameCreate={onGameCreate}
+                        texts={TEXTS.ROLE}
+                    />
+                    <NewGameButton
+                        role={ROLE.player}
+                        newGameKeyword={newGameKeyword}
+                        onGameCreate={onGameCreate}
+                        texts={TEXTS.ROLE}
+                    />
                 </div>
             </div>
         </div>
