@@ -1,0 +1,23 @@
+.red {
+    background-color: indianred !important;
+    color: white;
+}
+
+.blue {
+    background-color: cadetblue !important;
+    color: white;
+}
+
+.black {
+    background-color: #4c4c4c !important;
+    color: white;
+}
+
+.white {
+    background-color: #f6f6f6 !important;
+    color: #a5a5a5;
+}
+
+.transparent {
+    opacity: 0.4;
+}

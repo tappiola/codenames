@@ -2,17 +2,25 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import GameField from './components/GameField/GameField';
 import {NewGameModal} from "./components/NewGameModal/NewGameModal";
-import classes from './App.css';
 import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
 import {LANGUAGES, LOCAL_STORAGE_KEY, TEXTS} from "./constants";
 import {LanguageSelector} from "./components/LanguageSelector/LanguageSelector";
 import {FullscreenButton} from "./components/Fullscreen/FullscreenButton";
 import {RulesPopup} from "./components/Rules/RulesPopup";
 import {RulesButton} from "./components/Rules/RulesButton";
+import classes from './App.module.css';
 
 export const LanguageContext = React.createContext();
 
-function App() {
+const BasicButtons = ({onSetLanguage, onSetRulesDisplayed}) => {
+    return <div className={classes.topBannerSheer}>
+        <LanguageSelector onSetLanguage={onSetLanguage}/>
+        <RulesButton onRulesClick={() => onSetRulesDisplayed(true)}/>
+        <FullscreenButton/>
+    </div>
+}
+
+const App = () => {
     const history = useHistory();
     const {location: {pathname}} = history;
     const [newGameSelectionMode, setNewGameSelectionMode] = useState(false);
@@ -41,17 +49,13 @@ function App() {
         localStorage.setItem(LOCAL_STORAGE_KEY, language);
     }
 
-    const BasicButtons = () => {
-        return <div className="top-banner-sheer">
-            <LanguageSelector onSetLanguage={setLanguage}/>
-            <RulesButton onRulesClick={() => setRulesDisplayed(true)}/>
-            <FullscreenButton/>
-        </div>
-    }
-
     return <LanguageContext.Provider value={localizedTexts}>
         {rulesDisplayed && <RulesPopup onClose={() => setRulesDisplayed(false)}/>}
-        {(!gameKeyword || !playerRole) && <BasicButtons/>}
+        {(!gameKeyword || !playerRole) && (
+            <BasicButtons
+                onSetLanguage={setLanguage}
+                onSetRulesDisplayed={setRulesDisplayed}
+            />)}
         {newGameSelectionMode && <NewGameModal
             onGameCreate={gameCreateHandler}
             onNewGameCancel={() => setNewGameSelectionMode(false)}

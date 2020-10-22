@@ -58,16 +58,17 @@
 .roleButtons {
     width: 100%;
 }
+
 .selectRoleButton {
     composes: selectRoleButton from '../RoleSelectModal/RoleSelectModal.module.css';
 }
 
 .backdrop {
-  composes: backdrop from '../../App.css';
+    composes: backdrop from '../../App.module.css';
 }
 
 .closeModal {
-  composes: closeModal from '../../App.css';
+    composes: closeModal from '../../App.module.css';
 }
 
 .newGameButton {

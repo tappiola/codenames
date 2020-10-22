@@ -30,16 +30,16 @@
 }
 
 .backdrop {
-  composes: backdrop from '../../App.css';
+    composes: backdrop from '../../App.module.css';
 }
 
 .closeModal {
-  composes: closeModal from '../../App.css';
+    composes: closeModal from '../../App.module.css';
 }
 
-@media (min-width: 768px){
+@media (min-width: 768px) {
     .rules {
-    width: 60%;
+        width: 60%;
         height: 85%;
         padding: 40px 30px;
     }

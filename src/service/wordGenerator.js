@@ -26,6 +26,5 @@ export const selectRandomIndex = (gameKeyword, maxIndex) => {
 
 export const generateKeyword = words => {
     const index = Math.floor(Math.random() * words.length);
-    console.log(index)
     return words[index];
 }

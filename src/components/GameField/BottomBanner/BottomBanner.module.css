@@ -1,0 +1,22 @@
+.bottomBanner {
+    display: grid;
+    grid-template-columns: 35% auto 35%;
+}
+
+.wordsCounter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.wordsRemaining {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    background-color: #e3e0e0;
+    color: #313131;
+}

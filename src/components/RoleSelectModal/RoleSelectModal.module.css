@@ -25,5 +25,5 @@
 }
 
 .backdrop {
-  composes: backdrop from '../../App.css';
+    composes: backdrop from '../../App.module.css';
 }

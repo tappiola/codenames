@@ -1,0 +1,34 @@
+.field {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5% 2.5%;
+    margin: 2% 2rem;
+    justify-items: center;
+}
+
+.word {
+    background-color: #e3e0e0;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+/* Reduce font size for smaller screens */
+@media only screen and (orientation: landscape) and (max-height: 500px) {
+    .word {
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (orientation: portrait) and (max-width: 500px) {
+    .word {
+        font-size: 0.9rem;
+    }
+}

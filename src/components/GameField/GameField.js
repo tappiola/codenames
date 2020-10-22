@@ -1,19 +1,16 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import clsx from 'clsx';
 import classes from './GameField.module.css';
 import {fetchGameData, updateCurrentTeam, updateGameStatus} from "../../firebaseActions";
 import {COLOUR, ROLE, TEAM} from '../../constants';
 import {generateGame} from "../../service/wordGenerator";
 import {LanguageContext} from "../../App";
-import {FullscreenButton} from "../Fullscreen/FullscreenButton";
-import {LanguageSelector} from "../LanguageSelector/LanguageSelector";
-import {RulesButton} from "../Rules/RulesButton";
+import {TopBanner} from "./TopBanner/TopBanner";
+import {WordsGrid} from "./WordsGrid/WordsGrid";
+import {BottomBanner} from "./BottomBanner/BottomBanner";
 
 const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage, onRulesClick}) => {
 
-    const TEXTS = useContext(LanguageContext);
-    const {language} = TEXTS;
-
+    const {language} = useContext(LanguageContext);
     const [gameConfig, setGameConfig] = useState([]);
     const [firstTeam, setFirstTeam] = useState(null);
     const [gameData, setGameData] = useState([]);
@@ -102,58 +99,24 @@ const GameField = ({gameKeyword, playerRole, onNewGameStart, onSetLanguage, onRu
     }, [language, playerRole, clicksCurrentRound, winner, isBlackWordClicked, gameData, gameKeyword,
         clickedData, currentTeam, changeTeam]);
 
-    const EndRoundButton = () => (playerRole === ROLE.player && clicksCurrentRound > 0 && !winner && !isBlackWordClicked) &&
-        <button className={classes.topBannerButton} onClick={() => changeTeam()}>{TEXTS.endTurn}</button>
-
-    const NewGameButton = () => <button className={classes.topBannerButton} onClick={onNewGameStart}>{TEXTS.newGame}</button>
-
-    const TopBanner = () => {
-        return (
-            <div className={clsx(classes.topBanner, isBlackWordClicked ? classes.black : classes[currentTeam])}>
-                <div className={classes.topBannerContainer}>
-                    <span className={classes.topBannerStatus}>
-                {isBlackWordClicked
-                    ? TEXTS.blackWordClicked
-                    : winner ? TEXTS.WINNER[currentTeam] : TEXTS.YOUR_TURN[currentTeam]
-                }
-                </span>
-                    <EndRoundButton/>
-                </div>
-                <div className={classes.topBannerContainer}>
-                    <NewGameButton/>
-                    <LanguageSelector onSetLanguage={onSetLanguage}/>
-                    <RulesButton onRulesClick={onRulesClick}/>
-                    <FullscreenButton/>
-                </div>
-            </div>
-        )
-    }
-
-    const WordsCounter = ({colour}) => <div className={`${classes.wordsCounter} ${classes[colour]}`}>{getWordsCount(colour)}</div>
-
-    const getClassNames = wordData => clsx(classes.word, {
-        [classes[wordData.color]]: (playerRole === ROLE.captain && wordData.color !== COLOUR.white) || wordData.clicked,
-        [classes.transparent]: playerRole === ROLE.captain && wordData.clicked && wordData.color !== COLOUR.white
-    });
-
-
     return <div className={classes.gameField}>
-        <TopBanner/>
-        <div className={classes.field}>
-            {gameData.map((i, index) => <div
-                id={index}
-                key={i.word}
-                className={getClassNames(i)}
-                onClick={() => wordClickHandler(index)}
-            >
-                {i.word}
-            </div>)}
-        </div>
-        <div className={classes.bottomBanner}>
-            <WordsCounter colour={TEAM.red}/>
-            <div className={classes.wordsRemaining}>{TEXTS.wordsRemaining}</div>
-            <WordsCounter colour={TEAM.blue}/>
-        </div>
+        <TopBanner
+            onSetLanguage={onSetLanguage}
+            onRulesClick={onRulesClick}
+            isBlackWordClicked={isBlackWordClicked}
+            currentTeam={currentTeam}
+            winner={winner}
+            onNewGameStart={onNewGameStart}
+            onTeamChange={changeTeam}
+            playerRole={playerRole}
+            clicksCurrentRound={clicksCurrentRound}
+        />
+        <WordsGrid
+            gameData={gameData}
+            onWordClick={wordClickHandler}
+            playerRole={playerRole}
+        />
+        <BottomBanner onGetWordsCount={getWordsCount}/>
     </div>
 }
 
