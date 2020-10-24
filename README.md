@@ -2,6 +2,8 @@
 
 Online version of a popular board game Codenames (Кодовые имена)
 
+### Tech stack
+
 Frontend: React
 
 Backend: Firestore
