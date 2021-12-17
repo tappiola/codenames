@@ -1,4 +1,5 @@
-import * as firebase from "firebase/app";
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 import "firebase/auth";
 import "firebase/firestore";
 
@@ -12,9 +13,9 @@ const firebaseConfig = {
     appId: "1:726434951114:web:2766d17322c9ab77a1a933",
     measurementId: "G-9Z7FEWMLK5"
 };
-const app = firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-export const db = app.firestore();
+export const db = getFirestore(app);
 
 export function docToObject(doc) {
     return {

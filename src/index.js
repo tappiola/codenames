@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            <Route path="/:keyword?" component={App}/>
+            <Routes>
+                <Route path="/:keyword" element={<App/>}/>
+                <Route path="/" element={<App/>}/>
+            </Routes>
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')

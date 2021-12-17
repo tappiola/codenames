@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import GameField from './components/GameField/GameField';
 import {NewGameModal} from "./components/NewGameModal/NewGameModal";
 import {RoleSelect} from "./components/RoleSelectModal/RoleSelectModal";
@@ -21,14 +21,15 @@ const BasicButtons = ({onSetLanguage, onSetRulesDisplayed}) => {
 }
 
 const App = () => {
-    const history = useHistory();
-    const {location: {pathname}} = history;
+    const location = useLocation();
+    const {pathname} = location;
+    const navigate = useNavigate();
     const [newGameSelectionMode, setNewGameSelectionMode] = useState(false);
     const [rulesDisplayed, setRulesDisplayed] = useState(false);
     const [gameKeyword, setGameKeyword] = useState('');
     const [playerRole, setPlayerRole] = useState(null);
     const [localizedTexts, setLocalizedTexts] = useState(
-        TEXTS[localStorage.getItem(LOCAL_STORAGE_KEY) || LANGUAGES.RU]
+        TEXTS[localStorage.getItem(LOCAL_STORAGE_KEY) || LANGUAGES.EN]
     );
 
     useEffect(() => {
@@ -38,7 +39,7 @@ const App = () => {
     }, [pathname])
 
     const gameCreateHandler = (keyword, role) => {
-        history.push('/' + keyword);
+        navigate('/' + keyword);
         setPlayerRole(role);
         setGameKeyword(keyword);
         setNewGameSelectionMode(false);
